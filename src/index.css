@@ -1,0 +1,200 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #ffffff;
+  color: #0b1a2e;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 1s ease forwards;
+}
+
+.animate-slide-left {
+  animation: slideInLeft 0.8s ease forwards;
+}
+
+.delay-1 {
+  animation-delay: 0.1s;
+  opacity: 0;
+}
+.delay-2 {
+  animation-delay: 0.2s;
+  opacity: 0;
+}
+.delay-3 {
+  animation-delay: 0.3s;
+  opacity: 0;
+}
+.delay-4 {
+  animation-delay: 0.4s;
+  opacity: 0;
+}
+.delay-5 {
+  animation-delay: 0.5s;
+  opacity: 0;
+}
+
+/* Buttons */
+.btn-primary {
+  display: inline-block;
+  background: #0b1a2e;
+  color: #ffffff;
+  font-weight: 600;
+  padding: 14px 38px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+}
+
+.btn-primary:hover {
+  background: #1a3a5a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(11, 26, 46, 0.25);
+}
+
+.btn-secondary {
+  display: inline-block;
+  background: transparent;
+  color: #ffffff;
+  font-weight: 600;
+  padding: 14px 38px;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.btn-outline-navy {
+  display: inline-block;
+  background: transparent;
+  color: #0b1a2e;
+  font-weight: 600;
+  padding: 12px 34px;
+  border-radius: 8px;
+  border: 2px solid #0b1a2e;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-navy:hover {
+  background: #0b1a2e;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 18px;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-outline-navy {
+    padding: 12px 24px;
+    font-size: 0.9rem;
+  }
+}
+/* Force navbar colors on Products page */
+body:has(.products-page) .navbar:not(.scrolled) {
+  background: #ffffff !important;
+  border-bottom: 1px solid #eef2f7 !important;
+}
+
+body:has(.products-page) .navbar:not(.scrolled) .logo {
+  color: #0b1a2e !important;
+}
+
+body:has(.products-page) .navbar:not(.scrolled) .nav-link {
+  color: #3a4e6b !important;
+}
+
+body:has(.products-page) .navbar:not(.scrolled) .nav-link.active {
+  color: #0b1a2e !important;
+  border-bottom-color: #1a4a7a !important;
+}
+
+body:has(.products-page) .navbar:not(.scrolled) .nav-cta {
+  background: #0b1a2e !important;
+  color: #ffffff !important;
+}
+
+body:has(.products-page) .navbar:not(.scrolled) .mobile-toggle {
+  color: #0b1a2e !important;
+}

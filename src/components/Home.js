@@ -201,7 +201,7 @@ function Home() {
           <h3 className="subtitle">ABOUT US</h3>
           <h2>Reliable Partner. Superior Solutions.</h2>
           <p>
-            Name Chemicals is a leading manufacturer and supplier of high
+            CREST BIOSCIENTIFIC is a leading manufacturer and supplier of high
             quality chemicals, solvents and specialty products.
           </p>
           <div className="stats">

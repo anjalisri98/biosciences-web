@@ -6,7 +6,7 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <div className="logo">NAME <span>CHEMICALS</span></div>
+      <div className="logo">CREST <span>BIOSCIENTIFIC</span></div>
       <div className="hamburger" onClick={() => setIsOpen(!isOpen)}>
         <i className="fas fa-bars"></i>
       </div>

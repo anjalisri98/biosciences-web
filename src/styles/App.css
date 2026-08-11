@@ -23,7 +23,7 @@ ul {
 
 /* --- BUTTONS --- */
 .btn-primary {
-  background-color: #1a3c8f;
+  background-color: #002d5a; /* UPDATED: Crest Navy */
   color: white;
   padding: 12px 30px;
   border-radius: 6px;
@@ -33,19 +33,28 @@ ul {
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  transition: background-color 0.3s ease;
+}
+.btn-primary:hover {
+  background-color: #0aa5ad; /* UPDATED: Crest Teal on hover */
 }
 .btn-outline {
   background: transparent;
-  border: 2px solid #1a3c8f;
-  color: #1a3c8f;
+  border: 2px solid #002d5a; /* UPDATED: Crest Navy */
+  color: #002d5a; /* UPDATED: Crest Navy */
   padding: 12px 30px;
   border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
   display: inline-block;
+  transition: all 0.3s ease;
+}
+.btn-outline:hover {
+  background-color: #002d5a;
+  color: white;
 }
 .subtitle {
-  color: #1a3c8f;
+  color: #002d5a; /* UPDATED: Crest Navy */
   font-weight: 600;
   font-size: 0.9rem;
   letter-spacing: 1px;
@@ -76,7 +85,7 @@ ul {
   align-items: center;
   font-weight: bold;
   font-size: 1.5rem;
-  color: #1a3c8f;
+  color: #002d5a; /* UPDATED: Crest Navy */
 }
 .nav-links {
   display: flex;
@@ -85,12 +94,12 @@ ul {
   font-weight: 500;
 }
 .nav-links a:hover {
-  color: #1a3c8f;
+  color: #0aa5ad; /* UPDATED: Crest Teal */
 }
 .nav-links a.active {
-  color: #1a3c8f;
+  color: #002d5a; /* UPDATED: Crest Navy */
   font-weight: 700;
-  border-bottom: 2px solid #1a3c8f;
+  border-bottom: 2px solid #002d5a; /* UPDATED: Crest Navy */
   padding-bottom: 5px;
 }
 
@@ -108,7 +117,7 @@ ul {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1; /* SLIDES ARE AT THE VERY BACK */
+  z-index: 1;
 }
 
 /* The 5 slides inside the background */
@@ -121,38 +130,39 @@ ul {
   background-size: cover;
   background-position: center;
   opacity: 0;
-  transition: opacity 1.5s ease-in-out; /* Smooth fade */
+  transition: opacity 1.5s ease-in-out;
 }
 .hero-slide.active {
   opacity: 1;
 }
 
-/* YOUR LEFT-SIDE GRADIENT OVERLAY */
+/* FIXED: LEFT-SIDE GRADIENT OVERLAY */
 .hero-background::after {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
-  width: 55%; /* Covers exactly the left portion where text is */
+  width: 55%;
   height: 100%;
+  /* FIXED THE INVALID RGB VALUES HERE */
   background: linear-gradient(
     to right,
-    rgba(357, 432, 432, 20.95) 63%,
-    rgba(448, 503, 462, 0) 100%
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0) 100%
   );
-  /* GRADIENT SITS ON TOP OF THE SLIDES */
+  z-index: 2;
 }
 
 /* YOUR TEXT CONTENT */
 .hero-content {
   position: relative;
-  z-index: 3; /* TEXT SITS ON TOP OF THE GRADIENT */
+  z-index: 3;
   max-width: 550px;
-  margin-left: 5%; /* This keeps your text perfectly inside that left 55% gradient */
+  margin-left: 5%;
 }
 .hero h1 {
   font-size: 3rem;
-  color: #1a3c8f;
+  color: #002d5a; /* UPDATED: Crest Navy */
   margin-bottom: 15px;
   line-height: 1.2;
 }
@@ -162,7 +172,7 @@ ul {
   color: #333;
 }
 
-/* SLIDE INDICATOR DOTS (Sits on top of everything) */
+/* SLIDE INDICATOR DOTS */
 .hero-indicators {
   position: absolute;
   bottom: 25px;
@@ -176,7 +186,7 @@ ul {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.6); /* Semi-transparent white */
+  background-color: rgba(255, 255, 255, 0.6);
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -184,13 +194,13 @@ ul {
   transform: scale(1.2);
 }
 .hero-dot.active {
-  background-color: #1a3c8f; /* Turns blue when active */
+  background-color: #002d5a; /* UPDATED: Crest Navy */
   transform: scale(1.2);
 }
 
 /* --- SEARCH --- */
 .search-section {
-  background: #1a3c8f;
+  background: #002d5a; /* UPDATED: Crest Navy */
   padding: 20px 0;
   margin-bottom: 40px;
 }
@@ -231,7 +241,7 @@ ul {
   outline: none;
 }
 .search-box button {
-  background: #1a3c8f;
+  background: #002d5a; /* UPDATED: Crest Navy */
   color: white;
   border: none;
   padding: 0 25px;
@@ -255,14 +265,13 @@ ul {
   }
 }
 
-/* UPDATED: Added blue shadow to base cards */
 .product-card {
   background: #ffffff;
   padding: 21px 69px;
   text-align: center;
   border-radius: 22px;
-  border: 6px solid #e5e7eb; /* Slightly darker base border for clarity */
-  box-shadow: 0 8px 25px rgba(26, 60, 143, 0.06); /* Permanent subtle blue shadow */
+  border: 6px solid #e5e7eb;
+  box-shadow: 0 8px 25px rgba(0, 45, 90, 0.06); /* UPDATED: Navy Shadow */
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   cursor: default;
@@ -270,14 +279,12 @@ ul {
   flex-direction: column;
   align-items: center;
 }
-/* UPDATED: Amplified blue shadow on hover and blue border */
 .product-card:hover {
   transform: translateY(-12px);
-  box-shadow: 0 15px 40px rgba(26, 60, 143, 0.15);
-  border-color: #1a3c8f;
+  box-shadow: 0 15px 40px rgba(0, 45, 90, 0.15); /* UPDATED: Navy Shadow */
+  border-color: #002d5a; /* UPDATED: Crest Navy */
 }
 
-/* PRODUCT Icon wrapper */
 .product-card .icon-wrapper {
   width: 70px;
   height: 70px;
@@ -291,11 +298,11 @@ ul {
 }
 .product-card i {
   font-size: 2.2rem;
-  color: #1a3c8f;
+  color: #002d5a; /* UPDATED: Crest Navy */
   transition: transform 0.4s ease;
 }
 .product-card:hover .icon-wrapper {
-  background: #1a3c8f;
+  background: #002d5a; /* UPDATED: Crest Navy */
   transform: scale(1.05);
 }
 .product-card:hover .icon-wrapper i {
@@ -305,7 +312,7 @@ ul {
 
 .product-card h3 {
   font-size: 1.2rem;
-  color: #1a3c8f;
+  color: #002d5a; /* UPDATED: Crest Navy */
   margin-bottom: 10px;
   font-weight: 600;
 }
@@ -317,7 +324,7 @@ ul {
   flex-grow: 1;
 }
 .view-link {
-  color: #1a3c8f;
+  color: #002d5a; /* UPDATED: Crest Navy */
   font-weight: 700;
   font-size: 0.85rem;
   text-transform: uppercase;
@@ -327,14 +334,14 @@ ul {
   transition: color 0.3s ease;
 }
 .view-link:hover {
-  color: #122b6b;
+  color: #0aa5ad; /* UPDATED: Crest Teal */
 }
 .view-link:hover i {
   transform: translateX(5px);
 }
 .view-link i {
   transition: transform 0.3s ease;
-  color: #1a3c8f;
+  color: #002d5a;
 }
 
 /* --- SECTION TITLE --- */
@@ -343,7 +350,7 @@ ul {
   margin: 0 0 50px 0;
 }
 .section-title .subtitle {
-  color: #1a3c8f;
+  color: #002d5a; /* UPDATED: Crest Navy */
   font-weight: 700;
   font-size: 0.85rem;
   letter-spacing: 1.5px;
@@ -352,22 +359,21 @@ ul {
 }
 .section-title h2 {
   font-size: 2.4rem;
-  color: #1a3c8f;
+  color: #002d5a; /* UPDATED: Crest Navy */
   margin-bottom: 5px;
   font-weight: 700;
 }
 
 /* ============================================
-   WHY CHOOSE US TIMELINE (SCROLL TRIGGER READY)
+   WHY CHOOSE US TIMELINE
    ============================================ */
-/* --- CENTER THE TITLES --- */
 .why-choose-us-section .container {
   text-align: center;
   padding-bottom: 40px;
 }
 .why-choose-us-section .sub-heading {
   display: block;
-  color: #1a3c8f;
+  color: #002d5a; /* UPDATED: Crest Navy */
   font-weight: 700;
   letter-spacing: 1.5px;
   text-transform: uppercase;
@@ -375,23 +381,20 @@ ul {
 }
 .why-choose-us-section .main-heading {
   font-size: 2.4rem;
-  color: #1a3c8f;
+  color: #002d5a; /* UPDATED: Crest Navy */
   font-weight: 700;
   margin-bottom: 40px;
 }
 
-/* --- TIMELINE CONTAINER --- */
 .features-list {
   position: relative;
-  max-width: 1100px; /* Max width ensures it doesn't stretch too wide */
+  max-width: 1100px;
   margin: 0 auto;
   padding: 20px 0;
   display: flex;
   flex-direction: column;
-  gap: 40px; /* Space between each row */
+  gap: 40px;
 }
-
-/* THE CENTRAL BLUE LINE */
 .features-list::before {
   content: "";
   position: absolute;
@@ -399,60 +402,56 @@ ul {
   bottom: 0;
   left: 50%;
   width: 2px;
-  background-color: #1a3c8f;
+  background-color: #002d5a; /* UPDATED: Crest Navy */
   transform: translateX(-50%);
   z-index: 1;
 }
 
-/* --- FEATURE ITEMS --- */
 .feature-item {
   position: relative;
   width: 100%;
-  min-height: 130px; /* Minimum height to prevent text overlap */
+  min-height: 130px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* --- ICONS (Centered on the blue line) --- */
 .features-list .icon-wrapper {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 2; /* Sits on top of the line */
+  z-index: 2;
   width: 60px;
   height: 60px;
   background-color: #ffffff;
-  border: 3px solid #1a3c8f; /* Theme Blue */
+  border: 3px solid #002d5a; /* UPDATED: Crest Navy */
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #1a3c8f;
+  color: #002d5a; /* UPDATED: Crest Navy */
   font-size: 24px;
-  box-shadow: 0 4px 12px rgba(26, 60, 143, 0.15);
-  /* Infinite blue pulse animation: */
+  box-shadow: 0 4px 12px rgba(0, 45, 90, 0.15);
   animation: pulseBlue 2.5s infinite ease-out;
 }
 
 @keyframes pulseBlue {
   0% {
-    box-shadow: 0 0 0 0 rgba(26, 60, 143, 0.4);
+    box-shadow: 0 0 0 0 rgba(0, 45, 90, 0.4);
   }
   70% {
-    box-shadow: 0 0 0 12px rgba(26, 60, 143, 0);
+    box-shadow: 0 0 0 12px rgba(0, 45, 90, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(26, 60, 143, 0);
+    box-shadow: 0 0 0 0 rgba(0, 45, 90, 0);
   }
 }
 
-/* --- TEXT CARDS (Left and Right Alternation) --- */
 .feature-text {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 40%; /* 40% of the container width */
+  width: 40%;
   max-width: 450px;
   z-index: 1;
   background: #ffffff;
@@ -461,8 +460,6 @@ ul {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
   border: 1px solid #f0f0f0;
   text-align: left;
-
-  /* Start hidden for scroll animation */
   opacity: 0;
 }
 .feature-text.animate-in {
@@ -472,19 +469,17 @@ ul {
   animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-/* Odd items (1, 3) -> Left Side */
 .feature-item:nth-child(odd) .feature-text {
   left: 0;
-  margin-right: calc(50% + 60px); /* Leaves a 60px gap from the center line */
+  margin-right: calc(50% + 60px);
 }
 .feature-item:nth-child(odd) .feature-text.animate-in {
   animation-name: popInLeft;
 }
 
-/* Even items (2, 4) -> Right Side */
 .feature-item:nth-child(even) .feature-text {
   right: 0;
-  margin-left: calc(50% + 60px); /* Leaves a 60px gap from the center line */
+  margin-left: calc(50% + 60px);
 }
 .feature-item:nth-child(even) .feature-text.animate-in {
   animation-name: popInRight;
@@ -515,7 +510,7 @@ ul {
   margin: 0 0 8px 0;
   font-size: 20px;
   font-weight: 700;
-  color: #1a3c8f;
+  color: #002d5a; /* UPDATED: Crest Navy */
 }
 .feature-text p {
   margin: 0;
@@ -524,124 +519,222 @@ ul {
   line-height: 1.6;
 }
 
-/* --- MOBILE VIEW (Resets to standard stacked list) --- */
 /* ========================================
-   GLOBAL MOBILE RESPONSIVENESS
-/* ========================================
-   GLOBAL MOBILE RESPONSIVENESS
-   ======================================== */
-/* ========================================
-   MOBILE RESPONSIVENESS
+   MOBILE RESPONSIVENESS (CLEANED UP)
    ======================================== */
 @media (max-width: 768px) {
-
   /* --- NAVBAR --- */
-  .menu-toggle-btn { display: block !important; background: none; border: none; font-size: 1.5rem; color: #1A3C8F; cursor: pointer; }
-  .nav-links { display: none !important; flex-direction: column !important; position: absolute; top: 70px; left: 0; width: 100%; background: white; padding: 20px 0; box-shadow: 0 4px 8px rgba(0,0,0,0.05); z-index: 999; text-align: center; gap: 15px !important; }
-  .nav-links.open { display: flex !important; }
-  .nav-links .search-icon { display: none; }
-  
+  .menu-toggle-btn {
+    display: block !important;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #002d5a;
+    cursor: pointer;
+  }
+  .nav-links {
+    display: none !important;
+    flex-direction: column !important;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background: white;
+    padding: 20px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    z-index: 999;
+    text-align: center;
+    gap: 15px !important;
+  }
+  .nav-links.open {
+    display: flex !important;
+  }
+  .nav-links .search-icon {
+    display: none;
+  }
+
   /* --- HERO SECTION --- */
-  .hero { min-height: 420px !important; align-items: flex-start !important; padding-top: 40px !important; height: auto !important; }
-  .hero-content { max-width: 90% !important; margin-left: 5% !important; padding-right: 10px !important; }
-  .hero h1 { font-size: 1.8rem !important; line-height: 1.2 !important; margin-bottom: 10px !important; }
-  .hero p { font-size: 0.95rem !important; margin-bottom: 20px !important; }
-  .hero-indicators { bottom: 15px !important; gap: 8px !important; }
-  .hero-dot { width: 8px !important; height: 8px !important; }
-  
+  .hero {
+    min-height: 420px !important;
+    align-items: flex-start !important;
+    padding-top: 40px !important;
+    height: auto !important;
+  }
+  .hero-content {
+    max-width: 90% !important;
+    margin-left: 5% !important;
+    padding-right: 10px !important;
+  }
+  .hero h1 {
+    font-size: 1.8rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 10px !important;
+  }
+  .hero p {
+    font-size: 0.95rem !important;
+    margin-bottom: 20px !important;
+  }
+  .hero-indicators {
+    bottom: 15px !important;
+    gap: 8px !important;
+  }
+  .hero-dot {
+    width: 8px !important;
+    height: 8px !important;
+  }
+
   /* --- SEARCH SECTION --- */
-  .search-wrapper { flex-direction: column !important; align-items: stretch !important; gap: 15px !important; }
-  .search-features { justify-content: center; gap: 15px; flex-wrap: wrap; font-size: 0.8rem; }
-  .search-box { flex-direction: column !important; max-width: 100% !important; }
-  .search-box select { border-left: none !important; border-top: 1px solid #ccc !important; padding: 12px !important; width: 100% !important; }
-  .search-box button { padding: 12px !important; width: 100% !important; display: flex !important; justify-content: center !important; }
-  
+  .search-wrapper {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 15px !important;
+  }
+  .search-features {
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    font-size: 0.8rem;
+  }
+  .search-box {
+    flex-direction: column !important;
+    max-width: 100% !important;
+  }
+  .search-box select {
+    border-left: none !important;
+    border-top: 1px solid #ccc !important;
+    padding: 12px !important;
+    width: 100% !important;
+  }
+  .search-box button {
+    padding: 12px !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+  }
+
   /* --- TEXT & TITLES --- */
-  .section-title h2, .main-heading { font-size: 1.8rem !important; }
-  
+  .section-title h2,
+  .main-heading {
+    font-size: 1.8rem !important;
+  }
+
   /* --- ABOUT SECTION --- */
-  .about-section { display: flex; flex-direction: column !important; padding: 30px 20px !important; gap: 25px !important; }
-  .about-image { height: 200px !important; width: 100% !important; border-radius: 8px !important; }
-  .about-content { width: 100% !important; text-align: left !important; padding: 0 !important; }
-  .about-content h3.subtitle { text-align: left !important; margin-bottom: 5px !important; }
-  .about-content h2 { font-size: 1.6rem !important; line-height: 1.2 !important; margin-bottom: 12px !important; }
-  .about-content p { font-size: 0.95rem !important; line-height: 1.6 !important; margin-bottom: 25px !important; color: #555 !important; }
-  .stats { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 20px !important; justify-items: center !important; margin-bottom: 25px !important; }
-  .stat-item h4 { font-size: 1.6rem !important; margin-bottom: 0 !important; }
-  .stat-item p { font-size: 0.85rem !important; margin: 0 !important; }
-  .about-content .btn-outline { display: block !important; width: 100% !important; text-align: center !important; padding: 16px 0 !important; box-sizing: border-box !important; }
-  
+  .about-section {
+    display: flex;
+    flex-direction: column !important;
+    padding: 30px 20px !important;
+    gap: 25px !important;
+  }
+  .about-image {
+    height: 200px !important;
+    width: 100% !important;
+    border-radius: 8px !important;
+  }
+  .about-content {
+    width: 100% !important;
+    text-align: left !important;
+    padding: 0 !important;
+  }
+  .about-content h3.subtitle {
+    text-align: left !important;
+    margin-bottom: 5px !important;
+  }
+  .about-content h2 {
+    font-size: 1.6rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 12px !important;
+  }
+  .about-content p {
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+    margin-bottom: 25px !important;
+    color: #555 !important;
+  }
+  .stats {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 20px !important;
+    justify-items: center !important;
+    margin-bottom: 25px !important;
+  }
+  .stat-item h4 {
+    font-size: 1.6rem !important;
+    margin-bottom: 0 !important;
+  }
+  .stat-item p {
+    font-size: 0.85rem !important;
+    margin: 0 !important;
+  }
+  .about-content .btn-outline {
+    display: block !important;
+    width: 100% !important;
+    text-align: center !important;
+    padding: 16px 0 !important;
+    box-sizing: border-box !important;
+  }
+
   /* --- EVENTS SECTION --- */
-    /* 1. Shrink the section title slightly so it doesn't wrap awkwardly */
   .events-header {
     flex-direction: column !important;
     align-items: flex-start !important;
     gap: 10px !important;
     margin-bottom: 20px !important;
   }
-  .section-heading { 
-    font-size: 1.4rem !important; 
+  .section-heading {
+    font-size: 1.4rem !important;
     line-height: 1.2 !important;
   }
   .view-all-link {
     align-self: flex-start !important;
     font-size: 0.85rem !important;
   }
-
-  /* 2. Shrink the card size and spacing on mobile */
   .event-card {
-    padding: 15px 15px 20px 15px !important; /* Reduce card padding */
+    padding: 15px 15px 20px 15px !important;
     min-height: auto !important;
   }
-
-  /* 3. CRITICAL: Shrink the logo box to save vertical space */
   .event-logo-area {
-    height: 60px !important; /* Reduced from 110px */
+    height: 60px !important;
     padding: 10px !important;
     margin-bottom: 12px !important;
   }
-  
   .event-logo-area img {
     max-height: 100% !important;
     width: auto !important;
   }
-
-  /* 4. Tighten the text spacing */
   .event-details h4 {
     font-size: 1.05rem !important;
     margin-top: 5px !important;
     margin-bottom: 8px !important;
     line-height: 1.3 !important;
   }
-  .event-meta, .event-location {
+  .event-meta,
+  .event-location {
     font-size: 0.85rem !important;
     gap: 8px !important;
   }
-  .event-meta i, .event-location i {
+  .event-meta i,
+  .event-location i {
     width: 14px !important;
   }
 
-  
   /* --- FOOTER --- */
-  .footer-grid { grid-template-columns: 1fr; text-align: center; gap: 30px; }
+  .footer-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 30px;
+  }
 
-  /* ========================================
-     CRITICAL FIX: WHY CHOOSE US MOBILE
-     ======================================== */
+  /* --- WHY CHOOSE US MOBILE --- */
   .features-list {
-    gap: 25px !important; /* Spacing between rows */
+    gap: 25px !important;
     padding-top: 10px !important;
   }
-  
-  /* 1. Remove the central line */
   .features-list::before {
     display: none !important;
   }
-
-  /* 2. Reset the card container to Flex Row */
   .feature-item {
     display: flex !important;
-    flex-direction: row !important; /* Icon Left, Text Right */
+    flex-direction: row !important;
     align-items: flex-start !important;
     justify-content: flex-start !important;
     padding: 0 !important;
@@ -651,22 +744,17 @@ ul {
     border: none !important;
     width: 100% !important;
   }
-
-  /* 3. Make the Icon Static on the Left */
   .features-list .icon-wrapper {
     position: static !important;
     transform: none !important;
     width: 44px !important;
     height: 44px !important;
     font-size: 1.1rem !important;
-    margin-right: 16px !important; /* Space between icon and text */
-    flex-shrink: 0 !important; /* Prevents icon from shrinking */
+    margin-right: 16px !important;
+    flex-shrink: 0 !important;
     border-width: 2px !important;
-    /* Keep the blue pulse animation alive! */
     animation: pulseBlue 2.5s infinite ease-out !important;
   }
-
-  /* 4. Make the Text take up 100% of the remaining space */
   .feature-text {
     position: static !important;
     transform: none !important;
@@ -678,80 +766,27 @@ ul {
     border: none !important;
     box-shadow: none !important;
     text-align: left !important;
-    flex: 1 !important; /* Expands to fill the rest of the row */
-
-    /* Mobile Scroll Fade In Animation */
+    flex: 1 !important;
     opacity: 0 !important;
     transform: translateY(10px) !important;
     transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1) !important;
   }
-
-  /* Triggered by your React IntersectionObserver */
   .feature-text.animate-in {
     opacity: 1 !important;
     transform: translateY(0) !important;
   }
-
-  .feature-text h3 { font-size: 1.1rem !important; margin-bottom: 4px !important; }
-  .feature-text p { font-size: 0.9rem !important; line-height: 1.5 !important; color: #666 !important; }
+  .feature-text h3 {
+    font-size: 1.1rem !important;
+    margin-bottom: 4px !important;
+  }
+  .feature-text p {
+    font-size: 0.9rem !important;
+    line-height: 1.5 !important;
+    color: #666 !important;
+  }
 }
-.about-section {
-    flex-direction: column;
-    gap: 25px !important; /* Adds consistent spacing */
-    padding: 30px 15px !important; /* Prevents content touching screen edges */
-  }
-  
-  .about-image { 
-    height: 180px !important; /* Reduces height so it doesn't take up half the screen */
-    width: 100%;
-    border-radius: 8px !important;
-  }
 
-  .about-content { 
-    width: 100%;
-    padding: 0 10px !important; /* Gives text breathing room */
-    text-align: left !important; 
-    box-sizing: border-box !important;
-  }
-
-  .about-content h2 { 
-    font-size: 1.5rem !important; /* Reduces size to prevent awkward "Solutions." line break */
-    line-height: 1.3 !important; 
-    margin-bottom: 10px !important;
-    word-break: break-word !important;
-  }
-
-  .about-content p { 
-    font-size: 0.95rem !important; 
-    margin-bottom: 25px !important; 
-    line-height: 1.5 !important; 
-  }
-
-  /* --- FIX THE BUTTON ALIGNMENT & SIZE --- */
-  .about-content .btn-outline { 
-    display: block !important; 
-    width: 100% !important; /* Makes the button fill the screen width */
-    text-align: center !important; 
-    padding: 14px 0 !important; /* Makes it larger and easier to tap with a thumb */
-    box-sizing: border-box !important;
-    justify-content: center !important;
-  }
-  
-  /* --- STATS GRID ALIGNMENT --- */
-  .stats { 
-    justify-content: space-evenly !important; 
-    gap: 15px !important; 
-    margin-bottom: 25px !important; 
-  }
-  .stat-item { 
-    width: 45% !important; 
-    text-align: center !important; 
-  }
-  .stat-item h4 { font-size: 1.6rem !important; }
-  .stat-item p { font-size: 0.85rem !important; }
-
-
-/* --- EVENTS SECTION --- */
+/* --- EVENTS SECTION (Desktop) --- */
 .events-section {
   padding: 60px 0;
 }
@@ -765,12 +800,12 @@ ul {
 }
 .section-heading {
   font-size: 2rem;
-  color: #1a3c8f;
+  color: #002d5a;
   margin: 5px 0 0 0;
   font-weight: 700;
 }
 .view-all-link {
-  color: #1a3c8f;
+  color: #002d5a;
   font-weight: 700;
   font-size: 0.9rem;
   text-transform: uppercase;
@@ -781,7 +816,7 @@ ul {
   transition: color 0.3s ease;
 }
 .view-all-link:hover {
-  color: #122b6b;
+  color: #0aa5ad;
 }
 .view-all-link:hover i {
   transform: translateX(5px);
@@ -805,7 +840,6 @@ ul {
   }
 }
 
-/* --- EVENT CARD STYLES --- */
 .event-card {
   background: #ffffff;
   border: 1px solid #e8ecf1;
@@ -842,8 +876,8 @@ ul {
 }
 .event-card:hover {
   transform: perspective(800px) rotateY(-4deg) rotateX(4deg) translateY(-6px);
-  box-shadow: 0 20px 40px rgba(26, 60, 143, 0.15);
-  border-color: #1a3c8f;
+  box-shadow: 0 20px 40px rgba(0, 45, 90, 0.15);
+  border-color: #002d5a;
   background: #ffffff;
 }
 .event-logo-area {
@@ -873,7 +907,7 @@ ul {
 .event-details h4 {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #1a3c8f;
+  color: #002d5a;
   margin: 10px 0 10px 0;
 }
 .event-meta,
@@ -887,7 +921,7 @@ ul {
 }
 .event-meta i,
 .event-location i {
-  color: #1a3c8f;
+  color: #002d5a;
   width: 16px;
   text-align: center;
 }
@@ -918,7 +952,7 @@ ul {
 }
 .about-content h2 {
   font-size: 2rem;
-  color: #1a3c8f;
+  color: #002d5a;
   margin-bottom: 20px;
 }
 .about-content p {
@@ -937,7 +971,7 @@ ul {
 }
 .stat-item h4 {
   font-size: 1.8rem;
-  color: #1a3c8f;
+  color: #002d5a;
   margin: 0;
 }
 .stat-item p {
@@ -948,7 +982,7 @@ ul {
 
 /* --- FOOTER --- */
 footer {
-  background: #1a2b4c;
+  background: #002d5a;
   color: #ccc;
   padding: 40px 0 20px;
   margin-top: 40px;
@@ -983,6 +1017,6 @@ footer {
 input:focus,
 textarea:focus,
 select:focus {
-  outline: 2px solid #1a3c8f;
+  outline: 2px solid #002d5a;
   border-color: transparent !important;
 }

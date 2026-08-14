@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import "./styles/App.css"; // Your public website CSS
-import "./styles/Admin.css"; // 👈 ADD THIS LINE to import your new Admin CSS
+import "./styles/App.css"; 
+import "./styles/Admin.css"; 
 
 // Import all public pages
 import Layout from "./components/Layout";
@@ -11,20 +11,20 @@ import Products from "./components/Products";
 import Events from "./components/Events";
 import Contact from "./components/Contact";
 
-// Import Admin pages (Create these in src/components/)
+// 👈 ADD THIS IMPORT: The new standalone Submit Event page
+import SubmitEvent from "./components/SubmitEvent"; 
+
+// Import Admin pages
 import AdminLogin from "./components/AdminLogin";
 import AdminDashboard from "./components/AdminDashboard";
 
 function App() {
-  // 1. Add a state to track if the Admin is logged in
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // 2. If logged in, show the Admin Dashboard completely separate from the public layout
   if (isAuthenticated) {
     return <AdminDashboard onLogout={() => setIsAuthenticated(false)} />;
   }
 
-  // 3. Otherwise, show the public routes and the Admin Login page
   return (
     <BrowserRouter>
       <Routes>
@@ -35,10 +35,12 @@ function App() {
           <Route path="products" element={<Products />} />
           <Route path="events" element={<Events />} />
           <Route path="contact" element={<Contact />} />
+          
+          {/* 👈 ADD THIS ROUTE HERE */}
+          <Route path="submit-event" element={<SubmitEvent />} />
         </Route>
 
         {/* --- ADMIN ROUTE --- */}
-        {/* The user will go to www.yoursite.com/admin to access login */}
         <Route 
           path="/admin" 
           element={<AdminLogin onLogin={() => setIsAuthenticated(true)} />} 
@@ -48,4 +50,4 @@ function App() {
   );
 }
 
-export default App; 
+export default App;

@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import "../styles/Admin.css";
+import { api } from "../api"; // Make sure this path is correct!
 
 function AdminLogin({ onLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Mock Login Validation (Replace this with your Backend API call)
-    if (email && password) {
-      onLogin(); // Trigger parent component to switch to dashboard
+    const res = await api.post("/dashboard/users/login", { email, password });
+
+    if (res.success) {
+      // Save the JWT token into the browser
+      localStorage.setItem("adminToken", res.data.token);
+      onLogin(); // Tell parent App.js to show Dashboard
     }
   };
 

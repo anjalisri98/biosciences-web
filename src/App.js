@@ -10,13 +10,12 @@ import About from "./components/About";
 import Products from "./components/Products";
 import Events from "./components/Events";
 import Contact from "./components/Contact";
-
-// 👈 ADD THIS IMPORT: The new standalone Submit Event page
 import SubmitEvent from "./components/SubmitEvent"; 
 
 // Import Admin pages
 import AdminLogin from "./components/AdminLogin";
 import AdminDashboard from "./components/AdminDashboard";
+import Downloads from "./components/Downloads"; // Import the Downloads component
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -35,6 +34,7 @@ function App() {
           <Route path="products" element={<Products />} />
           <Route path="events" element={<Events />} />
           <Route path="contact" element={<Contact />} />
+          <Route path="downloads" element={<Downloads />} /> 
           
           {/* 👈 ADD THIS ROUTE HERE */}
           <Route path="submit-event" element={<SubmitEvent />} />

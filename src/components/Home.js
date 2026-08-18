@@ -345,18 +345,64 @@ import { Link } from "react-router-dom";
 import { api } from "../api"; // Connects to your backend
 
 function Home() {
-  // --- 1. SLIDESHOW STATE & LOGIC ---
-  const slides = ['/image1.jpg', '/image2.jpg', '/image3.jpg', '/image4.jpg', '/image6.jpg'];
+  // --- 1. SLIDESHOW DATA ---
+  const slides = [
+    { 
+      image: '/image1.jpg', 
+      title: "Innovative Chemical\nSolutions for a Better\nTomorrow", 
+      desc: "High performance chemicals and solvents for a wide range of industrial applications." 
+    },
+    { 
+      image: '/image2.jpg', 
+      title: "Sustainable & Green\nChemistry Solutions\n ABOUT US", 
+      desc: "Environmentally responsible products designed for a cleaner, greener future.",
+      linkTo: "/about" 
+    },
+    { 
+      image: '/image3.jpg', 
+      title: "Advanced Laboratory\nReagents & Specialties", 
+      desc: "High-purity lab chemicals and specialty reagents tailored for cutting-edge research." 
+    },
+    { 
+      image: '/image4.jpg', 
+      title: "Industrial-Grade\nProcess Chemicals", 
+      desc: "Reliable and efficient process chemicals for petrochemicals and manufacturing industries." 
+    },
+    { 
+      image: '/image6.jpg', 
+      title: "Global Supply Chain &\nTimely Delivery", 
+      desc: "Ensuring worldwide availability with on-time delivery and premium quality standards." 
+    }
+  ];
+
   const [currentSlide, setCurrentSlide] = useState(0);
+  const timerRef = useRef(null);
+
+  // --- 2. AUTO PLAY LOGIC ---
+  const resetTimer = () => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+  };
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 4000);
-    return () => clearInterval(timer);
+    resetTimer();
+    return () => clearInterval(timerRef.current);
   }, [slides.length]);
 
-  // --- 2. LIVE DATA FROM BACKEND ---
+  // --- 3. MANUAL SLIDER ARROWS ---
+  const handlePrev = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+    resetTimer();
+  };
+
+  const handleNext = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+    resetTimer();
+  };
+
+  // --- 4. LIVE DATA FROM BACKEND ---
   const [products, setProducts] = useState([]);
   const [events, setEvents] = useState([]);
 
@@ -375,7 +421,15 @@ function Home() {
     fetchData();
   }, []);
 
-  // --- 3. SCROLL ANIMATION LOGIC ---
+    // --- 5. SPLIT PRODUCTS BY CATEGORY ---
+  const labChemicals = products.filter(
+    (p) => p.category?.trim() === "Laboratory Chemicals"
+  );
+  const labGlasswares = products.filter(
+    (p) => p.category?.trim() === "Laboratory Glasswares"
+  );
+
+  // --- 6. SCROLL ANIMATION LOGIC ---
   const featuresListRef = useRef(null);
   const aboutSectionRef = useRef(null);
 
@@ -429,42 +483,84 @@ function Home() {
 
   return (
     <>
-      {/* --- HERO SECTION (SLIDESHOW) --- */}
+      {/* --- HERO SECTION (SYNCED ANIMATION + ARROWS) --- */}
       <section className="hero">
         <div className="hero-background">
-          {slides.map((slide, index) => (
-            <div
-              key={index}
-              className={`hero-slide ${index === currentSlide ? 'active' : ''}`}
-              style={{ backgroundImage: `url('${slide}')` }}
-            ></div>
-          ))}
+          {slides.map((slide, index) => {
+            const isActive = index === currentSlide;
+            if (slide.linkTo) {
+              return (
+                <Link 
+                  key={index} 
+                  to={slide.linkTo} 
+                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'block', zIndex: 1 }}
+                >
+                  <div
+                    className={`hero-slide ${isActive ? 'active' : ''}`}
+                    style={{ backgroundImage: `url('${slide.image}')` }}
+                  ></div>
+                </Link>
+              );
+            }
+            return (
+              <div
+                key={index}
+                className={`hero-slide ${isActive ? 'active' : ''}`}
+                style={{ backgroundImage: `url('${slide.image}')` }}
+              ></div>
+            );
+          })}
         </div>
+
         <div className="hero-content">
-          <h1>
-            Innovative Chemical
-            <br />
-            Solutions for a Better
-            <br />
-            Tomorrow
+          <h1 style={{ whiteSpace: 'pre-line' }}>
+            {slides[currentSlide].title.split('\n').map((line, idx) => {
+              const isAboutUs = line.trim() === "ABOUT US" && slides[currentSlide].linkTo;
+              if (isAboutUs) {
+                return (
+                  <React.Fragment key={idx}>
+                    <br />
+                    <Link to={slides[currentSlide].linkTo} className="about-slide-link">
+                      ABOUT US
+                    </Link>
+                  </React.Fragment>
+                );
+              }
+              return (
+                <React.Fragment key={idx}>
+                  {idx > 0 && <br />}
+                  {line}
+                </React.Fragment>
+              );
+            })}
           </h1>
-          <p>
-            High performance chemicals and solvents for a wide range of
-            industrial applications.
+          <p key={currentSlide + '-desc'} className="hero-text-anim">
+            {slides[currentSlide].desc}
           </p>
-          <Link to="/products" className="btn-primary">
-            EXPLORE PRODUCTS →
-          </Link>
+          {!slides[currentSlide].linkTo && (
+            <Link to="/products" className="btn-primary">
+              EXPLORE PRODUCTS →
+            </Link>
+          )}
         </div>
+
+        <button className="hero-arrow hero-arrow-left" onClick={handlePrev}>
+          <i className="fas fa-chevron-left"></i>
+        </button>
+        <button className="hero-arrow hero-arrow-right" onClick={handleNext}>
+          <i className="fas fa-chevron-right"></i>
+        </button>
+
         <div className="hero-indicators">
           {slides.map((_, index) => (
             <span
               key={index}
               className={`hero-dot ${index === currentSlide ? 'active' : ''}`}
-              onClick={() => setCurrentSlide(index)}
+              onClick={() => { setCurrentSlide(index); resetTimer(); }}
             ></span>
           ))}
         </div>
+
         <a href="https://wa.me/919876543210" className="whatsapp-btn" target="_blank" rel="noopener noreferrer">
           <i className="fab fa-whatsapp" style={{ fontSize: "1.5rem" }}></i> Chat on WhatsApp
         </a>
@@ -487,27 +583,65 @@ function Home() {
         </div>
       </section>
 
-      {/* --- PRODUCT CATEGORIES (LIVE FROM BACKEND) --- */}
+      {/* --- PRODUCT CATEGORIES (GROUPED BY CATEGORY) --- */}
       <section className="container" style={{ paddingTop: "40px", paddingBottom: "60px" }}>
         <div className="section-title">
           <p className="subtitle">OUR PRODUCT CATEGORIES</p>
           <h2>High Quality Chemical Solutions</h2>
         </div>
-        <div className="product-grid">
-          {products.slice(0, 6).map((item) => (
-            <div className="product-card" key={item._id}>
-              <div className="icon-wrapper">
-                {/* Note: You can map item.category to icons dynamically later */}
-                <i className="fas fa-flask"></i>
-              </div>
-              <h3>{item.name}</h3>
-              <p>{item.description}</p>
-              <Link to="/products" className="view-link">
-                VIEW PRODUCTS <i className="fas fa-arrow-right" style={{ fontSize: "0.8rem", marginLeft: "5px" }}></i>
-              </Link>
+
+        {/* Category 1: Laboratory Chemicals */}
+        {labChemicals.length > 0 && (
+          <div style={{ marginBottom: "40px" }}>
+            <h3 style={{ color: "#002D5A", fontSize: "1.6rem", marginBottom: "20px", textAlign: "center" }}>
+              <i className="fas fa-flask" style={{ marginRight: "10px" }}></i> Laboratory Chemicals
+            </h3>
+            <div className="product-grid">
+              {labChemicals.map((item) => (
+                <div className="product-card" key={item._id}>
+                  <div className="icon-wrapper">
+                    <i className="fas fa-flask"></i>
+                  </div>
+                  <h3>{item.name}</h3>
+                  <p>{item.description}</p>
+                  <Link to="/products" className="view-link">
+                    VIEW PRODUCTS <i className="fas fa-arrow-right" style={{ fontSize: "0.8rem", marginLeft: "5px" }}></i>
+                  </Link>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        )}
+
+        {/* Category 2: Laboratory Glasswares */}
+        {labGlasswares.length > 0 && (
+          <div>
+            <h3 style={{ color: "#002D5A", fontSize: "1.6rem", marginBottom: "20px", textAlign: "center" }}>
+              <i className="fas fa-flask" style={{ marginRight: "10px" }}></i> Laboratory Glasswares
+            </h3>
+            <div className="product-grid">
+              {labGlasswares.map((item) => (
+                <div className="product-card" key={item._id}>
+                  <div className="icon-wrapper">
+                    <i className="fas fa-flask"></i>
+                  </div>
+                  <h3>{item.name}</h3>
+                  <p>{item.description}</p>
+                  <Link to="/products" className="view-link">
+                    VIEW PRODUCTS <i className="fas fa-arrow-right" style={{ fontSize: "0.8rem", marginLeft: "5px" }}></i>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Fallback if no products exist in those exact categories */}
+        {labChemicals.length === 0 && labGlasswares.length === 0 && products.length > 0 && (
+          <div style={{ textAlign: "center", color: "#666", marginTop: "30px" }}>
+            No products found in "Laboratory Chemicals" or "Laboratory Glasswares" yet.
+          </div>
+        )}
       </section>
 
       {/* --- ABOUT PREVIEW --- */}
@@ -553,7 +687,7 @@ function Home() {
         </div>
       </section>
 
-      {/* --- EVENTS PREVIEW (LIVE FROM BACKEND) --- */}
+      {/* --- EVENTS PREVIEW --- */}
       <section className="container events-section">
         <div className="events-header">
           <div>

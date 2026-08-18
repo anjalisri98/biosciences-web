@@ -99,7 +99,7 @@ function AdminDashboard({ onLogout }) {
         fileFormData.append("folder", folder);
 
         // Call the Upload API
-        const uploadRes = await api.post("/uploads", fileFormData, true);
+        const uploadRes = await api.post("/dashboard/common/upload", fileFormData, true);
         const fileUrl = uploadRes.data.url;
 
         // Append the URL to the final payload based on feature

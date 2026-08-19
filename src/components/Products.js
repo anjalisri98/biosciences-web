@@ -316,7 +316,7 @@ function Products() {
                     <button 
                       className="btn-primary-admin" 
                       style={{ padding: "6px 16px", fontSize: "0.8rem" }}
-                      // onClick={() => handleViewDetails(product._id)} // Uncomment if you added modal
+                      //onClick={() => handleViewDetails(product._id)} // Uncomment if you added modal
                     >
                       View Details
                     </button>

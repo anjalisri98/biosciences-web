@@ -148,41 +148,29 @@ import { Link, Outlet } from "react-router-dom";
 
 function Layout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isProductsOpen, setIsProductsOpen] = useState(false); // Mobile submenu toggle
+  const [isProductsOpen, setIsProductsOpen] = useState(false); // For mobile dropdown
 
   return (
     <div className="App">
       {/* --- NAVBAR --- */}
       <nav className="navbar container">
         <div className="logo">
-          <img
-            src="/logo_cb.png"
-            alt="Logo"
-            style={{ height: "40px", marginRight: "10px" }}
-          />
-          <span style={{ color: "#002D5A", fontWeight: "bold", fontSize: "1.4rem" }}>
-            CREST
-          </span>
-          <span style={{ color: "#0AA5AD", fontWeight: "normal", fontSize: "1.4rem", fontWeight: "bold" }}>
-            &nbsp;BIOSCIENTIFIC
-          </span>
+          <img src="/logo_cb.png" alt="Logo" style={{ height: "40px", marginRight: "10px" }} />
+          <span style={{ color: "#002D5A", fontWeight: "bold", fontSize: "1.4rem" }}>CREST</span>
+          <span style={{ color: "#0AA5AD", fontWeight: "normal", fontSize: "1.4rem", fontWeight: "bold" }}>&nbsp;BIOSCIENTIFIC</span>
         </div>
 
-        {/* Hamburger Button */}
+        {/* Hamburger Button - Visible only on mobile due to CSS */}
         <button className="menu-toggle-btn" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           <i className={isMenuOpen ? "fas fa-times" : "fas fa-bars"}></i>
         </button>
 
         {/* Nav Links */}
         <ul className={`nav-links ${isMenuOpen ? "open" : ""}`}>
-          <li>
-            <Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link>
-          </li>
-          <li>
-            <Link to="/about" onClick={() => setIsMenuOpen(false)}>About Us</Link>
-          </li>
+          <li><Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link></li>
+          <li><Link to="/about" onClick={() => setIsMenuOpen(false)}>About Us</Link></li>
 
-          {/* --- UPDATED: PRODUCTS DROPDOWN --- */}
+          {/* --- PRODUCTS DROPDOWN --- */}
           <li className={`dropdown-li ${isProductsOpen ? 'open' : ''}`}>
             <span className="dropdown-trigger" onClick={() => setIsProductsOpen(!isProductsOpen)}>
               Products <i className="fas fa-chevron-down"></i>
@@ -206,12 +194,8 @@ function Layout() {
             </ul>
           </li>
 
-          <li>
-            <Link to="/downloads" onClick={() => setIsMenuOpen(false)}>Downloads</Link>
-          </li>
-          <li>
-            <Link to="/contact" onClick={() => setIsMenuOpen(false)}>Contact Us</Link>
-          </li>
+          <li><Link to="/downloads" onClick={() => setIsMenuOpen(false)}>Downloads</Link></li>
+          <li><Link to="/contact" onClick={() => setIsMenuOpen(false)}>Contact Us</Link></li>
         </ul>
       </nav>
 
@@ -224,12 +208,9 @@ function Layout() {
           <div className="footer-grid">
             <div className="footer-col">
               <div className="logo" style={{ color: "white", marginBottom: "15px" }}>
-                CREST&nbsp;
-                <span style={{ fontWeight: "normal" }}>BIOSCIENTIFIC</span>
+                CREST&nbsp;<span style={{ fontWeight: "normal" }}>BIOSCIENTIFIC</span>
               </div>
-              <p style={{ fontSize: "0.9rem", lineHeight: "1.6" }}>
-                Delivering high performance chemicals worldwide.
-              </p>
+              <p style={{ fontSize: "0.9rem", lineHeight: "1.6" }}>Delivering high performance chemicals worldwide.</p>
             </div>
             <div className="footer-col">
               <h4>Quick Links</h4>

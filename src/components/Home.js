@@ -840,41 +840,112 @@ function Home() {
         </div>
       </section>
 
-      {/* --- ABOUT PREVIEW --- */}
-      <section className="container about-section" ref={aboutSectionRef}>
-        <div className="about-image">
-          <img src="/image7.jpg" alt="Industrial Plant" />
-        </div>
-        <div className="about-content">
-          <h3 className="subtitle">ABOUT US</h3>
-          <h2>Reliable Partner. Superior Solutions.</h2>
-          <p>
-            CREST Bioscientific is a leading manufacturer and supplier of high
-            quality chemicals, solvents and specialty products.
-          </p>
-          <div className="stats">
-            <div className="stat-item">
-              <h4>25+</h4>
-              <p>Years of Exp.</p>
-            </div>
-            <div className="stat-item">
-              <h4>500+</h4>
-              <p>Happy Customers</p>
-            </div>
-            <div className="stat-item">
-              <h4>100+</h4>
-              <p>Product Variants</p>
-            </div>
-            <div className="stat-item">
-              <h4>10+</h4>
-              <p>Countries Served</p>
-            </div>
+      {/* --- ABOUT PREVIEW (Completely Redesigned) --- */}
+
+<section className="about-section">
+  <div className="about-card">
+
+    {/* ================= LEFT IMAGE ================= */}
+    <div className="about-image-wrapper">
+      <img
+        src="/image7.jpg"
+        alt="CREST Biocorative Industrial Facility"
+        className="about-image"
+      />
+    </div>
+
+    {/* ================= RIGHT CONTENT ================= */}
+    <div className="about-content">
+
+      <div className="about-heading-area">
+        <p className="about-tag">
+          ABOUT US
+          <span className="about-tag-line"></span>
+        </p>
+
+        <h2>
+          Reliable Partner.
+          <br />
+          Superior Solutions.
+        </h2>
+
+        <p className="about-description">
+          CREST Biocorative is a leading manufacturer and
+          supplier of high quality chemicals, solvents and
+          specialty products.
+        </p>
+      </div>
+
+      {/* ================= STATS ================= */}
+      <div className="stats-grid">
+
+        <div className="stat-item">
+          <div className="stat-icon">
+            <i className="fas fa-award"></i>
           </div>
-          <Link to="/about" className="btn-outline">
-            KNOW MORE ABOUT US →
-          </Link>
+
+          <div className="stat-info">
+            <span className="stat-number">25+</span>
+            <span className="stat-label">
+              Years of Exp.
+            </span>
+          </div>
         </div>
-      </section>
+
+        <div className="stat-item">
+          <div className="stat-icon">
+            <i className="fas fa-users"></i>
+          </div>
+
+          <div className="stat-info">
+            <span className="stat-number">500+</span>
+            <span className="stat-label">
+              Happy Customers
+            </span>
+          </div>
+        </div>
+
+        <div className="stat-item">
+          <div className="stat-icon">
+            <i className="fas fa-flask"></i>
+          </div>
+
+          <div className="stat-info">
+            <span className="stat-number">100+</span>
+            <span className="stat-label">
+              Product Variants
+            </span>
+          </div>
+        </div>
+
+        <div className="stat-item">
+          <div className="stat-icon">
+            <i className="fas fa-globe"></i>
+          </div>
+
+          <div className="stat-info">
+            <span className="stat-number">10+</span>
+            <span className="stat-label">
+              Countries Served
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      {/* ================= BUTTON ================= */}
+      <Link
+        to="/about"
+        className="about-btn"
+      >
+        KNOW MORE ABOUT US
+        <i className="fas fa-arrow-right"></i>
+      </Link>
+
+    </div>
+
+  </div>
+</section>
 
       {/* --- WHY CHOOSE US --- */}
       <section className="why-choose-us-section">

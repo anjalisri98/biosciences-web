@@ -616,7 +616,7 @@ function Home() {
           ))}
         </div>
 
-        <a
+        {/* <a
           href="https://wa.me/919876543210"
           className="whatsapp-btn"
           target="_blank"
@@ -624,37 +624,58 @@ function Home() {
         >
           <i className="fab fa-whatsapp" style={{ fontSize: "1.5rem" }}></i>{" "}
           Chat on WhatsApp
-        </a>
+        </a> */}
       </section>
 
-      {/* --- SEARCH SECTION --- */}
-      <section className="search-section">
-        <div className="container search-wrapper">
-          <div className="search-features">
-            <span>
-              <i className="fas fa-flask"></i> Wide Product Range
-            </span>
-            <span>
-              <i className="fas fa-check-circle"></i> Premium Quality
-            </span>
-            <span>
-              <i className="fas fa-truck"></i> Timely Delivery
-            </span>
-            <span>
-              <i className="fas fa-headset"></i> Technical Support
-            </span>
-          </div>
-          <div className="search-box">
-            <input type="text" placeholder="Search for products..." />
-            <select>
-              <option>All Categories</option>
-            </select>
-            <button>
-              <i className="fas fa-search"></i> SEARCH
-            </button>
+      {/* --- FLOATING SEARCH --- */}
+      <div
+        className="container"
+        style={{ position: "relative", marginBottom: "30px" }}
+      >
+        <div className="search-container-floating">
+          <div
+            className="search-wrapper"
+            style={{
+              padding: "15px 20px",
+              margin: 0,
+              gap: "10px",
+              background: "transparent",
+              boxShadow: "none",
+            }}
+          >
+            <div
+              className="search-features"
+              style={{
+                color: "#002D5A",
+                fontSize: "0.8rem",
+                fontWeight: "500",
+              }}
+            >
+              <span>
+                <i className="fas fa-flask"></i> Wide Range
+              </span>
+              <span>
+                <i className="fas fa-check-circle"></i> Premium
+              </span>
+              <span>
+                <i className="fas fa-truck"></i> Fast Delivery
+              </span>
+              <span>
+                <i className="fas fa-headset"></i> Support
+              </span>
+            </div>
+            <div className="search-box">
+              <input type="text" placeholder="Search..." />
+              <select>
+                <option>All Categories</option>
+              </select>
+              <button>
+                <i className="fas fa-search"></i> SEARCH
+              </button>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* --- PRODUCT CATEGORIES (GROUPED BY CATEGORY) --- */}
       <section
@@ -946,6 +967,8 @@ function Home() {
 
   </div>
 </section>
+
+   
 
       {/* --- WHY CHOOSE US --- */}
       <section className="why-choose-us-section">

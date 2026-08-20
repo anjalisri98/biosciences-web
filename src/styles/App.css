@@ -1200,6 +1200,288 @@ footer .footer-col ul li a:hover {
   }
 }
  
+/* ============================================================
+   🆕  INDUSTRIES WE SERVE  —  Full Styles
+   ============================================================ */
+
+.industries-section {
+  padding: 60px 0 80px;
+  background: #f8fafc;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle decorative background pattern */
+.industries-section::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(10, 165, 173, 0.04) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.industries-section .section-title {
+  margin-bottom: 48px;
+}
+
+.industries-subtitle {
+  color: #6b7280;
+  font-size: 1.1rem;
+  max-width: 580px;
+  margin: 8px auto 0;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* ===== GRID ===== */
+.industries-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+/* ===== CARD ===== */
+.industry-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  min-height: 340px;
+  cursor: pointer;
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+              box-shadow 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  opacity: 0;
+  transform: translateY(40px);
+  will-change: transform, opacity;
+}
+
+.industry-card.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+  transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1),
+              opacity 0.7s ease,
+              box-shadow 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Stagger delays */
+.industry-card.delay-1.animate-in { transition-delay: 0.05s; }
+.industry-card.delay-2.animate-in { transition-delay: 0.15s; }
+
+.industry-card:hover {
+  transform: translateY(-12px) scale(1.01);
+  box-shadow: 0 24px 60px rgba(0, 45, 90, 0.18);
+}
+
+/* ===== BACKGROUND IMAGE ===== */
+.industry-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.industry-card:hover .industry-bg {
+  transform: scale(1.08);
+}
+
+/* ===== OVERLAY ===== */
+.industry-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.15) 0%,
+    rgba(0, 0, 0, 0.65) 60%,
+    rgba(0, 0, 0, 0.80) 100%
+  );
+  transition: background 0.5s ease;
+}
+
+.industry-card:hover .industry-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.10) 0%,
+    rgba(0, 0, 0, 0.55) 55%,
+    rgba(0, 0, 0, 0.75) 100%
+  );
+}
+
+/* ===== CONTENT ===== */
+.industry-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  height: 100%;
+  padding: 32px 28px 30px;
+  color: #ffffff;
+}
+
+/* Icon */
+.industry-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+}
+
+.industry-icon-wrapper i {
+  font-size: 1.6rem;
+  color: #ffffff;
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.industry-card:hover .industry-icon-wrapper {
+  background: rgba(255, 255, 255, 0.28);
+  transform: scale(1.08) rotate(-4deg);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.industry-card:hover .industry-icon-wrapper i {
+  transform: scale(1.12) rotate(6deg);
+}
+
+/* Title */
+.industry-content h3 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  letter-spacing: 0.3px;
+  color: #ffffff;
+}
+
+/* Description */
+.industry-content p {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0 0 18px 0;
+  max-width: 95%;
+  transition: color 0.3s ease;
+}
+
+.industry-card:hover .industry-content p {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* "Learn More" link */
+.industry-learn-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+  padding: 6px 0;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+.industry-learn-more i {
+  font-size: 0.7rem;
+  transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.industry-card:hover .industry-learn-more {
+  color: #ffffff;
+  border-bottom-color: rgba(255, 255, 255, 0.5);
+}
+
+.industry-card:hover .industry-learn-more i {
+  transform: translateX(6px);
+}
+
+/* ===== ACCENT LINE (color from inline style) ===== */
+.industry-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--card-color, #0B3B5C);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: 3;
+}
+
+.industry-card:hover::after {
+  transform: scaleX(1);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 992px) {
+  .industries-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+  }
+}
+
+@media (max-width: 600px) {
+  .industries-section {
+    padding: 40px 0 50px;
+  }
+
+  .industries-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .industry-card {
+    min-height: 280px;
+  }
+
+  .industry-content {
+    padding: 24px 20px 24px;
+  }
+
+  .industry-content h3 {
+    font-size: 1.15rem;
+  }
+
+  .industry-content p {
+    font-size: 0.85rem;
+    max-width: 100%;
+  }
+
+  .industry-icon-wrapper {
+    width: 46px;
+    height: 46px;
+  }
+
+  .industry-icon-wrapper i {
+    font-size: 1.3rem;
+  }
+
+  .industries-subtitle {
+    font-size: 0.95rem;
+    padding: 0 10px;
+  }
+}
 /* --- HIDE HAMBURGER ON DESKTOP --- */
 .menu-toggle-btn {
   display: none;

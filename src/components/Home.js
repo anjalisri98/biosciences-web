@@ -49,7 +49,7 @@
 //     <>
 //       {/* --- HERO SECTION (UPDATED SLIDESHOW) --- */}
 //       <section className="hero">
-        
+
 //         {/* Changed to a container that holds all slides */}
 //         <div className="hero-background">
 //           {slides.map((slide, index) => (
@@ -102,7 +102,7 @@
 //       </section>
 
 //       {/* --- THE REST OF YOUR CODE REMAINS EXACTLY THE SAME BELOW --- */}
-      
+
 //       {/* --- SEARCH SECTION --- */}
 //       <section className="search-section">
 //         <div className="container search-wrapper">
@@ -345,8 +345,36 @@ import { Link } from "react-router-dom";
 import { api } from "../api"; // Connects to your backend
 
 function Home() {
-  // --- 1. SLIDESHOW STATE & LOGIC ---
-  const slides = ['/image1.jpg', '/image2.jpg', '/image3.jpg', '/image4.jpg', '/image6.jpg'];
+  // --- 1. SLIDESHOW DATA ---
+  const slides = [
+    {
+      image: "/image1.jpg",
+      title: "Innovative Chemical\nSolutions for a Better\nTomorrow",
+      desc: "High performance chemicals and solvents for a wide range of industrial applications.",
+    },
+    {
+      image: "/image2.jpg",
+      title: "Sustainable & Green\nChemistry Solutions\n ABOUT US",
+      desc: "Environmentally responsible products designed for a cleaner, greener future.",
+      linkTo: "/about",
+    },
+    {
+      image: "/image3.jpg",
+      title: "Advanced Laboratory\nReagents & Specialties",
+      desc: "High-purity lab chemicals and specialty reagents tailored for cutting-edge research.",
+    },
+    {
+      image: "/image4.jpg",
+      title: "Industrial-Grade\nProcess Chemicals",
+      desc: "Reliable and efficient process chemicals for petrochemicals and manufacturing industries.",
+    },
+    {
+      image: "/image6.jpg",
+      title: "Global Supply Chain &\nTimely Delivery",
+      desc: "Ensuring worldwide availability with on-time delivery and premium quality standards.",
+    },
+  ];
+
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
@@ -363,10 +391,10 @@ function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const productRes = await api.get('/dashboard/products/list');
+        const productRes = await api.get("/dashboard/products/list");
         setProducts(productRes.data || []);
 
-        const eventRes = await api.get('/dashboard/events/list');
+        const eventRes = await api.get("/dashboard/events/list");
         setEvents(eventRes.data || []);
       } catch (err) {
         console.error("Failed to fetch data from backend:", err.message);
@@ -375,10 +403,21 @@ function Home() {
     fetchData();
   }, []);
 
-  // --- 3. SCROLL ANIMATION LOGIC ---
+  // --- 5. SPLIT PRODUCTS BY CATEGORY ---
+  const labChemicals = products.filter(
+    (p) => p.category?.trim() === "Laboratory Chemicals",
+  );
+  const labGlasswares = products.filter(
+    (p) => p.category?.trim() === "Laboratory Glasswares",
+  );
+
+  // --- 6. SCROLL ANIMATION LOGIC ---
   const featuresListRef = useRef(null);
   const aboutSectionRef = useRef(null);
+  // 🆕 ADD THE NEW REF HERE
+  const industriesRef = useRef(null);
 
+  // --- Existing useEffect for features ---
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -388,11 +427,12 @@ function Home() {
           }
         });
       },
-      { threshold: 0.15, rootMargin: "0px 0px -50px 0px" }
+      { threshold: 0.15, rootMargin: "0px 0px -50px 0px" },
     );
 
     if (featuresListRef.current) {
-      const featureTexts = featuresListRef.current.querySelectorAll(".feature-text");
+      const featureTexts =
+        featuresListRef.current.querySelectorAll(".feature-text");
       featureTexts.forEach((text, index) => {
         text.style.animationDelay = index * 0.15 + "s";
         observer.observe(text);
@@ -400,12 +440,14 @@ function Home() {
     }
     return () => {
       if (featuresListRef.current) {
-        const featureTexts = featuresListRef.current.querySelectorAll(".feature-text");
+        const featureTexts =
+          featuresListRef.current.querySelectorAll(".feature-text");
         featureTexts.forEach((text) => observer.unobserve(text));
       }
     };
   }, []);
 
+  // --- Existing useEffect for About section ---
   useEffect(() => {
     const aboutObserver = new IntersectionObserver(
       (entries) => {
@@ -415,42 +457,118 @@ function Home() {
           }
         });
       },
-      { threshold: 0.15, rootMargin: "0px 0px -50px 0px" }
+      { threshold: 0.15, rootMargin: "0px 0px -50px 0px" },
     );
 
     if (aboutSectionRef.current) {
       const aboutImage = aboutSectionRef.current.querySelector(".about-image");
-      const aboutContent = aboutSectionRef.current.querySelector(".about-content");
+      const aboutContent =
+        aboutSectionRef.current.querySelector(".about-content");
       if (aboutImage) aboutObserver.observe(aboutImage);
       if (aboutContent) aboutObserver.observe(aboutContent);
     }
-    return () => { /* cleanup */ };
+    return () => {
+      /* cleanup */
+    };
   }, []);
+
+  // 🆕 NEW useEffect for Industries Section — ADD THIS ENTIRE BLOCK
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Find all .industry-card children inside the observed container
+            entry.target
+              .querySelectorAll(".industry-card")
+              .forEach((card, i) => {
+                setTimeout(() => {
+                  card.classList.add("animate-in");
+                }, i * 120); // Stagger each card
+              });
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -50px 0px" },
+    );
+
+    if (industriesRef.current) {
+      observer.observe(industriesRef.current);
+    }
+
+    return () => {
+      if (industriesRef.current) {
+        observer.unobserve(industriesRef.current);
+      }
+    };
+  }, []); // Empty dependency array – runs once on mount
 
   return (
     <>
       {/* --- HERO SECTION (SLIDESHOW) --- */}
       <section className="hero">
         <div className="hero-background">
-          {slides.map((slide, index) => (
-            <div
-              key={index}
-              className={`hero-slide ${index === currentSlide ? 'active' : ''}`}
-              style={{ backgroundImage: `url('${slide}')` }}
-            ></div>
-          ))}
+          {slides.map((slide, index) => {
+            const isActive = index === currentSlide;
+            if (slide.linkTo) {
+              return (
+                <Link
+                  key={index}
+                  to={slide.linkTo}
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    display: "block",
+                    zIndex: 1,
+                  }}
+                >
+                  <div
+                    className={`hero-slide ${isActive ? "active" : ""}`}
+                    style={{ backgroundImage: `url('${slide.image}')` }}
+                  ></div>
+                </Link>
+              );
+            }
+            return (
+              <div
+                key={index}
+                className={`hero-slide ${isActive ? "active" : ""}`}
+                style={{ backgroundImage: `url('${slide.image}')` }}
+              ></div>
+            );
+          })}
         </div>
         <div className="hero-content">
-          <h1>
-            Innovative Chemical
-            <br />
-            Solutions for a Better
-            <br />
-            Tomorrow
+          <h1 style={{ whiteSpace: "pre-line" }}>
+            {slides[currentSlide].title.split("\n").map((line, idx) => {
+              const isAboutUs =
+                line.trim() === "ABOUT US" && slides[currentSlide].linkTo;
+              if (isAboutUs) {
+                return (
+                  <React.Fragment key={idx}>
+                    <br />
+                    <Link
+                      to={slides[currentSlide].linkTo}
+                      className="about-slide-link"
+                    >
+                      ABOUT US
+                    </Link>
+                  </React.Fragment>
+                );
+              }
+              return (
+                <React.Fragment key={idx}>
+                  {idx > 0 && <br />}
+                  {line}
+                </React.Fragment>
+              );
+            })}
           </h1>
-          <p>
-            High performance chemicals and solvents for a wide range of
-            industrial applications.
+          <p key={currentSlide + "-desc"} className="hero-text-anim">
+            {slides[currentSlide].desc}
           </p>
           <Link to="/products" className="btn-primary">
             EXPLORE PRODUCTS →
@@ -460,72 +578,347 @@ function Home() {
           {slides.map((_, index) => (
             <span
               key={index}
-              className={`hero-dot ${index === currentSlide ? 'active' : ''}`}
-              onClick={() => setCurrentSlide(index)}
+              className={`hero-dot ${index === currentSlide ? "active" : ""}`}
+              onClick={() => {
+                setCurrentSlide(index);
+                resetTimer();
+              }}
             ></span>
           ))}
         </div>
-        <a href="https://wa.me/919876543210" className="whatsapp-btn" target="_blank" rel="noopener noreferrer">
-          <i className="fab fa-whatsapp" style={{ fontSize: "1.5rem" }}></i> Chat on WhatsApp
-        </a>
+
+        {/* <a
+          href="https://wa.me/919876543210"
+          className="whatsapp-btn"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i className="fab fa-whatsapp" style={{ fontSize: "1.5rem" }}></i>{" "}
+          Chat on WhatsApp
+        </a> */}
       </section>
 
-      {/* --- SEARCH SECTION --- */}
-      <section className="search-section">
-        <div className="container search-wrapper">
-          <div className="search-features">
-            <span><i className="fas fa-flask"></i> Wide Product Range</span>
-            <span><i className="fas fa-check-circle"></i> Premium Quality</span>
-            <span><i className="fas fa-truck"></i> Timely Delivery</span>
-            <span><i className="fas fa-headset"></i> Technical Support</span>
-          </div>
-          <div className="search-box">
-            <input type="text" placeholder="Search for products..." />
-            <select><option>All Categories</option></select>
-            <button><i className="fas fa-search"></i> SEARCH</button>
+      {/* --- FLOATING SEARCH --- */}
+      <div
+        className="container"
+        style={{ position: "relative", marginBottom: "30px" }}
+      >
+        <div className="search-container-floating">
+          <div
+            className="search-wrapper"
+            style={{
+              padding: "15px 20px",
+              margin: 0,
+              gap: "10px",
+              background: "transparent",
+              boxShadow: "none",
+            }}
+          >
+            <div
+              className="search-features"
+              style={{
+                color: "#002D5A",
+                fontSize: "0.8rem",
+                fontWeight: "500",
+              }}
+            >
+              <span>
+                <i className="fas fa-flask"></i> Wide Range
+              </span>
+              <span>
+                <i className="fas fa-check-circle"></i> Premium
+              </span>
+              <span>
+                <i className="fas fa-truck"></i> Fast Delivery
+              </span>
+              <span>
+                <i className="fas fa-headset"></i> Support
+              </span>
+            </div>
+            <div className="search-box">
+              <input type="text" placeholder="Search..." />
+              <select>
+                <option>All Categories</option>
+              </select>
+              <button>
+                <i className="fas fa-search"></i> SEARCH
+              </button>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* --- PRODUCT CATEGORIES (LIVE FROM BACKEND) --- */}
-      <section className="container" style={{ paddingTop: "40px", paddingBottom: "60px" }}>
+      {/* --- PRODUCT CATEGORIES (GROUPED BY CATEGORY) --- */}
+      {/*}
+      <section
+        className="container"
+        style={{ paddingTop: "40px", paddingBottom: "60px" }}
+      >
         <div className="section-title">
           <p className="subtitle">OUR PRODUCT CATEGORIES</p>
           <h2>High Quality Chemical Solutions</h2>
         </div>
-        <div className="product-grid">
-          {products.slice(0, 6).map((item) => (
-            <div className="product-card" key={item._id}>
-              <div className="icon-wrapper">
-                {/* Note: You can map item.category to icons dynamically later */}
-                <i className="fas fa-flask"></i>
-              </div>
-              <h3>{item.name}</h3>
-              <p>{item.description}</p>
-              <Link to="/products" className="view-link">
-                VIEW PRODUCTS <i className="fas fa-arrow-right" style={{ fontSize: "0.8rem", marginLeft: "5px" }}></i>
-              </Link>
+
+        {/* Category 1: Laboratory Chemicals */}
+        {/* {labChemicals.length > 0 && (
+          <div style={{ marginBottom: "40px" }}>
+            <h3
+              style={{
+                color: "#002D5A",
+                fontSize: "1.6rem",
+                marginBottom: "20px",
+                textAlign: "center",
+              }}
+            >
+              <i className="fas fa-flask" style={{ marginRight: "10px" }}></i>{" "}
+              Laboratory Chemicals
+            </h3>
+            <div className="product-grid">
+              {labChemicals.map((item) => (
+                <div className="product-card" key={item._id}>
+                  <div className="icon-wrapper">
+                    <i className="fas fa-flask"></i>
+                  </div>
+                  <h3>{item.name}</h3>
+                  <p>{item.description}</p>
+                  <Link to="/products" className="view-link">
+                    VIEW PRODUCTS{" "}
+                    <i
+                      className="fas fa-arrow-right"
+                      style={{ fontSize: "0.8rem", marginLeft: "5px" }}
+                    ></i>
+                  </Link>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+        )} */}
+
+        {/* Category 2: Laboratory Glasswares */}
+        {/* {labGlasswares.length > 0 && (
+          <div>
+            <h3
+              style={{
+                color: "#002D5A",
+                fontSize: "1.6rem",
+                marginBottom: "20px",
+                textAlign: "center",
+              }}
+            >
+              <i className="fas fa-flask" style={{ marginRight: "10px" }}></i>{" "}
+              Laboratory Glasswares
+            </h3>
+            <div className="product-grid">
+              {labGlasswares.map((item) => (
+                <div className="product-card" key={item._id}>
+                  <div className="icon-wrapper">
+                    <i className="fas fa-flask"></i>
+                  </div>
+                  <h3>{item.name}</h3>
+                  <p>{item.description}</p>
+                  <Link to="/products" className="view-link">
+                    VIEW PRODUCTS{" "}
+                    <i
+                      className="fas fa-arrow-right"
+                      style={{ fontSize: "0.8rem", marginLeft: "5px" }}
+                    ></i>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Fallback if no products exist in those exact categories */}
+        {/* {labChemicals.length === 0 &&
+          labGlasswares.length === 0 &&
+          products.length > 0 && (
+            <div
+              style={{ textAlign: "center", color: "#666", marginTop: "30px" }}
+            >
+              No products found in "Laboratory Chemicals" or "Laboratory
+              Glasswares" yet.
+            </div>
+          )}
+      </section>  */}
+       
+      {/* ============================================================
+          🆕  INDUSTRIES WE SERVE  — (your new section)
+          ============================================================ */}
+      <section className="industries-section">
+        <div className="container">
+          <div className="section-title">
+            <p className="subtitle">INDUSTRIES WE SERVE</p>
+            <h2>Trusted by Leading Industries Worldwide</h2>
+            <p className="industries-subtitle">
+              Our high-quality chemical solutions power innovation across
+              diverse sectors
+            </p>
+          </div>
+
+          <div className="industries-grid" ref={industriesRef}>
+            {[
+              {
+                id: 1,
+                image: "/image1.jpg",
+                icon: "fa-pills",
+                title: "Pharmaceuticals",
+                desc: "High-purity solvents and reagents for drug discovery, development, and manufacturing.",
+                color: "#0B3B5C",
+              },
+              {
+                id: 2,
+                image: "/image2.jpg",
+                icon: "fa-oil-can",
+                title: "Petrochemicals",
+                desc: "Specialty chemicals and process aids for refining, polymer production, and fuel additives.",
+                color: "#1A4A3A",
+              },
+              {
+                id: 3,
+                image: "/image3.jpg",
+                icon: "fa-seedling",
+                title: "Agriculture",
+                desc: "Crop protection chemicals, fertilizers, and soil conditioners for sustainable farming.",
+                color: "#2D5A27",
+              },
+              {
+                id: 4,
+                image: "/image4.jpg",
+                icon: "fa-utensils",
+                title: "Food & Beverage",
+                desc: "Food-grade additives, preservatives, and sanitizing agents for safe production.",
+                color: "#7A4A1A",
+              },
+              {
+                id: 5,
+                image: "/image6.jpg",
+                icon: "fa-spa",
+                title: "Cosmetics & Personal Care",
+                desc: "Gentle surfactants, emollients, and active ingredients for premium beauty products.",
+                color: "#6B3A5C",
+              },
+              {
+                id: 6,
+                image: "/image7.jpg",
+                icon: "fa-microscope",
+                title: "Research & Development",
+                desc: "Ultra-pure lab chemicals and analytical standards for cutting-edge scientific research.",
+                color: "#2A3A6B",
+              },
+            ].map((industry, index) => (
+              <div
+                key={industry.id}
+                className={`industry-card ${index < 3 ? "delay-1" : "delay-2"}`}
+                style={{ "--card-color": industry.color }}
+              >
+                <div
+                  className="industry-bg"
+                  style={{ backgroundImage: `url('${industry.image}')` }}
+                />
+                <div className="industry-overlay" />
+                <div className="industry-content">
+                  <div className="industry-icon-wrapper">
+                    <i className={`fas ${industry.icon}`}></i>
+                  </div>
+                  <h3>{industry.title}</h3>
+                  <p>{industry.desc}</p>
+                  <span className="industry-learn-more">
+                    Learn More <i className="fas fa-arrow-right"></i>
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* --- ABOUT PREVIEW --- */}
-      <section className="container about-section" ref={aboutSectionRef}>
-        <div className="about-image">
-          <img src="/image7.jpg" alt="Industrial Plant" />
-        </div>
-        <div className="about-content">
-          <h3 className="subtitle">ABOUT US</h3>
-          <h2>Reliable Partner. Superior Solutions.</h2>
-          <p>CREST Bioscientific is a leading manufacturer and supplier of high quality chemicals, solvents and specialty products.</p>
-          <div className="stats">
-            <div className="stat-item"><h4>25+</h4><p>Years of Exp.</p></div>
-            <div className="stat-item"><h4>500+</h4><p>Happy Customers</p></div>
-            <div className="stat-item"><h4>100+</h4><p>Product Variants</p></div>
-            <div className="stat-item"><h4>10+</h4><p>Countries Served</p></div>
+      {/* --- ABOUT PREVIEW (Completely Redesigned) --- */}
+
+      <section className="about-section">
+        <div className="about-card">
+          {/* ================= LEFT IMAGE ================= */}
+          <div className="about-image-wrapper">
+            <img
+              src="/image7.jpg"
+              alt="CREST Biocorative Industrial Facility"
+              className="about-image"
+            />
           </div>
-          <Link to="/about" className="btn-outline">KNOW MORE ABOUT US →</Link>
+
+          {/* ================= RIGHT CONTENT ================= */}
+          <div className="about-content">
+            <div className="about-heading-area">
+              <p className="about-tag">
+                ABOUT US
+                <span className="about-tag-line"></span>
+              </p>
+
+              <h2>
+                Reliable Partner.
+                <br />
+                Superior Solutions.
+              </h2>
+
+              <p className="about-description">
+                CREST Biocorative is a leading manufacturer and supplier of high
+                quality chemicals, solvents and specialty products.
+              </p>
+            </div>
+
+            {/* ================= STATS ================= */}
+            <div className="stats-grid">
+              <div className="stat-item">
+                <div className="stat-icon">
+                  <i className="fas fa-award"></i>
+                </div>
+
+                <div className="stat-info">
+                  <span className="stat-number">25+</span>
+                  <span className="stat-label">Years of Exp.</span>
+                </div>
+              </div>
+
+              <div className="stat-item">
+                <div className="stat-icon">
+                  <i className="fas fa-users"></i>
+                </div>
+
+                <div className="stat-info">
+                  <span className="stat-number">500+</span>
+                  <span className="stat-label">Happy Customers</span>
+                </div>
+              </div>
+
+              <div className="stat-item">
+                <div className="stat-icon">
+                  <i className="fas fa-flask"></i>
+                </div>
+
+                <div className="stat-info">
+                  <span className="stat-number">100+</span>
+                  <span className="stat-label">Product Variants</span>
+                </div>
+              </div>
+
+              <div className="stat-item">
+                <div className="stat-icon">
+                  <i className="fas fa-globe"></i>
+                </div>
+
+                <div className="stat-info">
+                  <span className="stat-number">10+</span>
+                  <span className="stat-label">Countries Served</span>
+                </div>
+              </div>
+            </div>
+
+            {/* ================= BUTTON ================= */}
+            <Link to="/about" className="about-btn">
+              KNOW MORE ABOUT US
+              <i className="fas fa-arrow-right"></i>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -533,16 +926,36 @@ function Home() {
       <section className="why-choose-us-section">
         <div className="container">
           <span className="sub-heading">WHY CHOOSE US</span>
-          <h2 className="main-heading">Commitment to Quality. Focused on You.</h2>
+          <h2 className="main-heading">
+            Commitment to Quality. Focused on You.
+          </h2>
           <div className="features-list" ref={featuresListRef}>
             {[
-              { icon: "fa-check", title: "Quality Assurance", desc: "Strict quality control and testing to deliver the best products." },
-              { icon: "fa-gears", title: "Advanced Technology", desc: "Modern infrastructure and advanced manufacturing processes." },
-              { icon: "fa-user-tie", title: "Expert Team", desc: "Experienced professionals ensuring customer satisfaction." },
-              { icon: "fa-leaf", title: "Sustainability", desc: "Committed to safe practices and a sustainable future." }
+              {
+                icon: "fa-check",
+                title: "Quality Assurance",
+                desc: "Strict quality control and testing to deliver the best products.",
+              },
+              {
+                icon: "fa-gears",
+                title: "Advanced Technology",
+                desc: "Modern infrastructure and advanced manufacturing processes.",
+              },
+              {
+                icon: "fa-user-tie",
+                title: "Expert Team",
+                desc: "Experienced professionals ensuring customer satisfaction.",
+              },
+              {
+                icon: "fa-leaf",
+                title: "Sustainability",
+                desc: "Committed to safe practices and a sustainable future.",
+              },
             ].map((item, idx) => (
               <div className="feature-item" key={idx}>
-                <div className="icon-wrapper"><i className={`fa-solid ${item.icon}`}></i></div>
+                <div className="icon-wrapper">
+                  <i className={`fa-solid ${item.icon}`}></i>
+                </div>
                 <div className="feature-text">
                   <h3>{item.title}</h3>
                   <p>{item.desc}</p>
@@ -553,20 +966,183 @@ function Home() {
         </div>
       </section>
 
-      {/* --- EVENTS PREVIEW (LIVE FROM BACKEND) --- */}
+      {/* --- PARTNERS & INSIGHTS SECTION --- */}
+      <section className="partners-section">
+        <div className="container">
+          {/* CTA Banner */}
+          <div className="cta-banner">
+            <h2>Ready to Partner with Us?</h2>
+            <p>
+              Get in touch today for custom quotes, bulk orders, and technical
+              support.
+            </p>
+            <Link to="/contact" className="btn-primary cta-btn">
+              CONTACT SALES TEAM →
+            </Link>
+          </div>
+
+          {/* Testimonials */}
+          <div className="testimonials">
+            <h3 className="section-subtitle">Trusted by Global Partners</h3>
+            <div className="testimonial-grid">
+              <div className="testimonial-card">
+                <span className="quote-mark">“</span>
+                <p>
+                  Crest Bioscientific has been a reliable partner in our
+                  research journey. The quality of chemicals and consistency in
+                  supply is excellent.
+                </p>
+                <div className="author">
+                  <strong>Dr. Arjun Mehta</strong>
+                  <span>Procurement Head, Research Institute</span>
+                </div>
+              </div>
+              <div className="testimonial-card">
+                <span className="quote-mark">“</span>
+                <p>
+                  Their global sourcing network and professional support helped
+                  us streamline our lab operations seamlessly.
+                </p>
+                <div className="author">
+                  <strong>Laura Chen</strong>
+                  <span>Senior Scientist, Biotech Company</span>
+                </div>
+              </div>
+              <div className="testimonial-card">
+                <span className="quote-mark">“</span>
+                <p>
+                  On-time delivery and transparent communication make Crest our
+                  preferred supplier for critical chemicals.
+                </p>
+                <div className="author">
+                  <strong>Michael Anderson</strong>
+                  <span>Head of Supply Chain, Pharma Solutions</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Insights for the Scientific Community */}
+          <div className="insights">
+            <div className="insights-header">
+              <h3 className="section-subtitle">
+                Insights for the Scientific Community
+              </h3>
+              <Link to="/blog" className="view-all-link">
+                View All →
+              </Link>
+            </div>
+            <div className="insights-grid">
+              <div className="insight-card">
+                <div className="insight-image">
+                  <img src="/image4.jpg" alt="Sustainable Chemistry" />
+                </div>
+                <span className="insight-tag">Industry Trends</span>
+                <span className="insight-date">May 16, 2025</span>
+                <h4>
+                  Sustainable Chemistry: Building a Greener Future for
+                  Laboratories
+                </h4>
+                <p>
+                  Explore how sustainable practices and green chemistry are
+                  shaping the future of the chemical industry.
+                </p>
+                <Link to="/blog/1" className="read-more">
+                  Read Article →
+                </Link>
+              </div>
+              <div className="insight-card">
+                <div className="insight-image">
+                  <img src="/image1.jpg" alt="Technical Guide" />
+                </div>
+                <span className="insight-tag">Technical Guide</span>
+                <span className="insight-date">May 09, 2025</span>
+                <h4>Choosing the Right Reagent for Accurate Results</h4>
+                <p>
+                  A guide to selecting the right laboratory reagents for your
+                  applications to ensure accuracy and reproducibility.
+                </p>
+                <Link to="/blog/2" className="read-more">
+                  Read Article →
+                </Link>
+              </div>
+              <div className="insight-card">
+                <div className="insight-image">
+                  <img src="/image6.jpg" alt="Chemical Regulations" />
+                </div>
+                <span className="insight-tag">Regulatory Update</span>
+                <span className="insight-date">May 09, 2025</span>
+                <h4>Global Chemical Regulations: What You Need to Know</h4>
+                <p>
+                  Stay updated with the latest international regulations and
+                  compliance requirements for chemical imports.
+                </p>
+                <Link to="/blog/3" className="read-more">
+                  Read Article →
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Knowledge Hub */}
+          <div className="knowledge-hub">
+            <h3 className="section-subtitle">Knowledge Hub</h3>
+            <div className="knowledge-grid">
+              <div className="knowledge-item">
+                <span className="knowledge-number">01</span>
+                <div>
+                  <h4>Sustainable Practices in Modern Laboratories</h4>
+                  <p>
+                    How laboratories can adopt sustainable practices without
+                    compromising performance.
+                  </p>
+                </div>
+              </div>
+              <div className="knowledge-item">
+                <span className="knowledge-number">02</span>
+                <div>
+                  <h4>Understanding Purity Grades of Chemicals</h4>
+                  <p>
+                    A quick guide to purity grades and how they impact your
+                    results.
+                  </p>
+                </div>
+              </div>
+              <div className="knowledge-item">
+                <span className="knowledge-number">03</span>
+                <div>
+                  <h4>Chemical Compliance Made Simple</h4>
+                  <p>
+                    Key compliance standards and documentation for global trade.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- EVENTS PREVIEW --- */}
       <section className="container events-section">
         <div className="events-header">
           <div>
             <p className="subtitle">UPCOMING EVENTS</p>
-            <h2 className="section-heading">Meet Us at Industry Leading Events</h2>
+            <h2 className="section-heading">
+              Meet Us at Industry Leading Events
+            </h2>
           </div>
-          <Link to="/events" className="view-all-link">VIEW ALL EVENTS <i className="fas fa-arrow-right"></i></Link>
+          <Link to="/events" className="view-all-link">
+            VIEW ALL EVENTS <i className="fas fa-arrow-right"></i>
+          </Link>
         </div>
         <div className="events-grid">
           {events.slice(0, 3).map((event) => (
             <div className="event-card" key={event._id}>
               <div className="event-logo-area">
-                <img src={event.imageUrl || '/placeholder.jpg'} alt={event.title} />
+                <img
+                  src={event.imageUrl || "/placeholder.jpg"}
+                  alt={event.title}
+                />
               </div>
               <div className="event-details">
                 <div className="event-meta">

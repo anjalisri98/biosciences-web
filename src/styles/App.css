@@ -1965,3 +1965,387 @@ footer .footer-col ul li a:hover {
     margin-top: 10px;
   }
 }
+
+/* ============================================================
+   PARTNERS & INSIGHTS SECTION
+   ============================================================ */
+
+.partners-section {
+  padding: 60px 0 40px;
+  background: #f8fafc;
+}
+
+/* ---- CTA Banner ---- */
+.cta-banner {
+  text-align: center;
+  background: #002D5A;
+  color: #fff;
+  padding: 50px 30px;
+  border-radius: 20px;
+  margin-bottom: 50px;
+  box-shadow: 0 10px 40px rgba(0, 45, 90, 0.15);
+}
+
+.cta-banner h2 {
+  font-size: 2.4rem;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.cta-banner p {
+  font-size: 1.1rem;
+  opacity: 0.85;
+  margin-bottom: 25px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-btn {
+  background: #0AA5AD !important;
+  border: none !important;
+  padding: 14px 40px !important;
+  border-radius: 40px !important;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.cta-btn:hover {
+  background: #fff !important;
+  color: #002D5A !important;
+  transform: translateY(-2px);
+}
+
+/* ---- Section Subtitle ---- */
+.section-subtitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0AA5AD;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* ============================================================
+   TESTIMONIALS
+   ============================================================ */
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-bottom: 60px;
+}
+
+.testimonial-card {
+  position: relative;
+  background: #ffffff;
+  padding: 28px 24px 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  border: 1px solid #eef2f6;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  cursor: default;
+}
+
+/* Hover: background, lift, rotate, shadow */
+.testimonial-card:hover {
+  background: #f0f7fc;              /* soft blue-tint */
+  transform: translateY(-8px) rotate(1deg);
+  box-shadow: 0 16px 48px rgba(0, 45, 90, 0.12);
+  border-color: #0AA5AD;
+}
+
+.quote-mark {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #0AA5AD;
+  opacity: 0.2;
+  line-height: 1;
+  display: block;
+  margin-bottom: -20px;
+  font-family: Georgia, serif;
+  transition: opacity 0.4s ease;
+}
+
+.testimonial-card:hover .quote-mark {
+  opacity: 0.4;                      /* more visible on hover */
+}
+
+.testimonial-card p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #444;
+  font-style: italic;
+  margin-bottom: 16px;
+}
+
+.testimonial-card .author {
+  display: flex;
+  flex-direction: column;
+}
+
+.testimonial-card .author strong {
+  color: #002D5A;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+}
+
+.testimonial-card:hover .author strong {
+  color: #0AA5AD;                   /* accent on hover */
+}
+
+.testimonial-card .author span {
+  color: #777;
+  font-size: 0.85rem;
+}
+
+/* ============================================================
+   INSIGHTS
+   ============================================================ */
+.insights-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.insights-header .section-subtitle {
+  margin-bottom: 0;
+  text-align: left;
+}
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-bottom: 60px;
+}
+
+.insight-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;                 /* keep image inside rounded corners */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  border: 1px solid #eef2f6;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  display: flex;
+  flex-direction: column;
+  cursor: default;
+}
+
+.insight-card:hover {
+  background: #f5f9ff;              /* lighter blue */
+  transform: translateY(-10px) scale(1.01);
+  box-shadow: 0 20px 60px rgba(0, 45, 90, 0.12);
+  border-color: #002D5A;
+}
+
+.insight-image {
+  width: 100%;
+  height: 160px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.insight-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.insight-card:hover .insight-image img {
+  transform: scale(1.12) rotate(-1deg);
+}
+
+.insight-card > *:not(.insight-image) {
+  padding: 0 20px;
+}
+
+.insight-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #0AA5AD;
+  background: rgba(10, 165, 173, 0.08);
+  padding: 2px 12px;
+  border-radius: 20px;
+  margin: 16px 0 6px 20px;          /* align with padding */
+  align-self: flex-start;
+  transition: all 0.3s ease;
+}
+
+.insight-card:hover .insight-tag {
+  background: #0AA5AD;
+  color: #fff;
+}
+
+.insight-date {
+  display: block;
+  font-size: 0.8rem;
+  color: #999;
+  margin: 0 0 8px 20px;
+}
+
+.insight-card h4 {
+  font-size: 1.1rem;
+  color: #002D5A;
+  margin: 0 20px 10px;
+  line-height: 1.3;
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+.insight-card:hover h4 {
+  color: #0AA5AD;
+}
+
+.insight-card p {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0 20px 16px;
+  flex-grow: 1;
+}
+
+.read-more {
+  color: #0AA5AD;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  align-self: flex-start;
+  margin: 0 20px 20px;
+}
+
+.read-more:hover {
+  color: #002D5A;
+  transform: translateX(6px);
+}
+
+/* ============================================================
+   KNOWLEDGE HUB
+   ============================================================ */
+.knowledge-hub {
+  margin-top: 20px;
+}
+
+.knowledge-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.knowledge-item {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  background: #ffffff;
+  padding: 24px 22px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  border: 1px solid #eef2f6;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  cursor: default;
+}
+
+.knowledge-item:hover {
+  background: #f0f7fc;              /* same soft tint */
+  transform: translateY(-6px);
+  box-shadow: 0 16px 48px rgba(0, 45, 90, 0.10);
+  border-color: #0AA5AD;
+}
+
+.knowledge-number {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #0AA5AD;
+  opacity: 0.4;
+  min-width: 40px;
+  line-height: 1.2;
+  transition: all 0.3s ease;
+}
+
+.knowledge-item:hover .knowledge-number {
+  opacity: 0.8;
+  transform: scale(1.1) translateX(4px);
+}
+
+.knowledge-item h4 {
+  font-size: 1.05rem;
+  color: #002D5A;
+  margin-bottom: 6px;
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+.knowledge-item:hover h4 {
+  color: #0AA5AD;
+}
+
+.knowledge-item p {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ============================================================
+   RESPONSIVE (Mobile)
+   ============================================================ */
+@media (max-width: 992px) {
+  .testimonial-grid,
+  .insights-grid,
+  .knowledge-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .testimonial-grid,
+  .insights-grid,
+  .knowledge-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-banner {
+    padding: 30px 20px;
+  }
+
+  .cta-banner h2 {
+    font-size: 1.8rem;
+  }
+
+  .cta-banner p {
+    font-size: 1rem;
+  }
+
+  .insights-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .knowledge-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .knowledge-number {
+    opacity: 0.6;
+  }
+
+  .insight-image {
+    height: 140px;
+  }
+
+  .quote-mark {
+    font-size: 2.8rem;
+  }
+}

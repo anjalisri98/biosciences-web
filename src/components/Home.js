@@ -678,6 +678,7 @@ function Home() {
       </div>
 
       {/* --- PRODUCT CATEGORIES (GROUPED BY CATEGORY) --- */}
+      {/*}
       <section
         className="container"
         style={{ paddingTop: "40px", paddingBottom: "60px" }}
@@ -688,7 +689,7 @@ function Home() {
         </div>
 
         {/* Category 1: Laboratory Chemicals */}
-        {labChemicals.length > 0 && (
+        {/* {labChemicals.length > 0 && (
           <div style={{ marginBottom: "40px" }}>
             <h3
               style={{
@@ -720,10 +721,10 @@ function Home() {
               ))}
             </div>
           </div>
-        )}
+        )} */}
 
         {/* Category 2: Laboratory Glasswares */}
-        {labGlasswares.length > 0 && (
+        {/* {labGlasswares.length > 0 && (
           <div>
             <h3
               style={{
@@ -758,7 +759,7 @@ function Home() {
         )}
 
         {/* Fallback if no products exist in those exact categories */}
-        {labChemicals.length === 0 &&
+        {/* {labChemicals.length === 0 &&
           labGlasswares.length === 0 &&
           products.length > 0 && (
             <div
@@ -768,8 +769,8 @@ function Home() {
               Glasswares" yet.
             </div>
           )}
-      </section>
-
+      </section>  */}
+       
       {/* ============================================================
           🆕  INDUSTRIES WE SERVE  — (your new section)
           ============================================================ */}
@@ -863,112 +864,92 @@ function Home() {
 
       {/* --- ABOUT PREVIEW (Completely Redesigned) --- */}
 
-<section className="about-section">
-  <div className="about-card">
-
-    {/* ================= LEFT IMAGE ================= */}
-    <div className="about-image-wrapper">
-      <img
-        src="/image7.jpg"
-        alt="CREST Biocorative Industrial Facility"
-        className="about-image"
-      />
-    </div>
-
-    {/* ================= RIGHT CONTENT ================= */}
-    <div className="about-content">
-
-      <div className="about-heading-area">
-        <p className="about-tag">
-          ABOUT US
-          <span className="about-tag-line"></span>
-        </p>
-
-        <h2>
-          Reliable Partner.
-          <br />
-          Superior Solutions.
-        </h2>
-
-        <p className="about-description">
-          CREST Biocorative is a leading manufacturer and
-          supplier of high quality chemicals, solvents and
-          specialty products.
-        </p>
-      </div>
-
-      {/* ================= STATS ================= */}
-      <div className="stats-grid">
-
-        <div className="stat-item">
-          <div className="stat-icon">
-            <i className="fas fa-award"></i>
+      <section className="about-section">
+        <div className="about-card">
+          {/* ================= LEFT IMAGE ================= */}
+          <div className="about-image-wrapper">
+            <img
+              src="/image7.jpg"
+              alt="CREST Biocorative Industrial Facility"
+              className="about-image"
+            />
           </div>
 
-          <div className="stat-info">
-            <span className="stat-number">25+</span>
-            <span className="stat-label">
-              Years of Exp.
-            </span>
-          </div>
-        </div>
+          {/* ================= RIGHT CONTENT ================= */}
+          <div className="about-content">
+            <div className="about-heading-area">
+              <p className="about-tag">
+                ABOUT US
+                <span className="about-tag-line"></span>
+              </p>
 
-        <div className="stat-item">
-          <div className="stat-icon">
-            <i className="fas fa-users"></i>
-          </div>
+              <h2>
+                Reliable Partner.
+                <br />
+                Superior Solutions.
+              </h2>
 
-          <div className="stat-info">
-            <span className="stat-number">500+</span>
-            <span className="stat-label">
-              Happy Customers
-            </span>
-          </div>
-        </div>
+              <p className="about-description">
+                CREST Biocorative is a leading manufacturer and supplier of high
+                quality chemicals, solvents and specialty products.
+              </p>
+            </div>
 
-        <div className="stat-item">
-          <div className="stat-icon">
-            <i className="fas fa-flask"></i>
-          </div>
+            {/* ================= STATS ================= */}
+            <div className="stats-grid">
+              <div className="stat-item">
+                <div className="stat-icon">
+                  <i className="fas fa-award"></i>
+                </div>
 
-          <div className="stat-info">
-            <span className="stat-number">100+</span>
-            <span className="stat-label">
-              Product Variants
-            </span>
-          </div>
-        </div>
+                <div className="stat-info">
+                  <span className="stat-number">25+</span>
+                  <span className="stat-label">Years of Exp.</span>
+                </div>
+              </div>
 
-        <div className="stat-item">
-          <div className="stat-icon">
-            <i className="fas fa-globe"></i>
-          </div>
+              <div className="stat-item">
+                <div className="stat-icon">
+                  <i className="fas fa-users"></i>
+                </div>
 
-          <div className="stat-info">
-            <span className="stat-number">10+</span>
-            <span className="stat-label">
-              Countries Served
-            </span>
+                <div className="stat-info">
+                  <span className="stat-number">500+</span>
+                  <span className="stat-label">Happy Customers</span>
+                </div>
+              </div>
+
+              <div className="stat-item">
+                <div className="stat-icon">
+                  <i className="fas fa-flask"></i>
+                </div>
+
+                <div className="stat-info">
+                  <span className="stat-number">100+</span>
+                  <span className="stat-label">Product Variants</span>
+                </div>
+              </div>
+
+              <div className="stat-item">
+                <div className="stat-icon">
+                  <i className="fas fa-globe"></i>
+                </div>
+
+                <div className="stat-info">
+                  <span className="stat-number">10+</span>
+                  <span className="stat-label">Countries Served</span>
+                </div>
+              </div>
+            </div>
+
+            {/* ================= BUTTON ================= */}
+            <Link to="/about" className="about-btn">
+              KNOW MORE ABOUT US
+              <i className="fas fa-arrow-right"></i>
+            </Link>
           </div>
         </div>
-
-      </div>
-
-      {/* ================= BUTTON ================= */}
-      <Link
-        to="/about"
-        className="about-btn"
-      >
-        KNOW MORE ABOUT US
-        <i className="fas fa-arrow-right"></i>
-      </Link>
-
-    </div>
-
-  </div>
-</section>
-
-   
+      </section>
 
       {/* --- WHY CHOOSE US --- */}
       <section className="why-choose-us-section">
@@ -1010,6 +991,162 @@ function Home() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* --- PARTNERS & INSIGHTS SECTION --- */}
+      <section className="partners-section">
+        <div className="container">
+          {/* CTA Banner */}
+          <div className="cta-banner">
+            <h2>Ready to Partner with Us?</h2>
+            <p>
+              Get in touch today for custom quotes, bulk orders, and technical
+              support.
+            </p>
+            <Link to="/contact" className="btn-primary cta-btn">
+              CONTACT SALES TEAM →
+            </Link>
+          </div>
+
+          {/* Testimonials */}
+          <div className="testimonials">
+            <h3 className="section-subtitle">Trusted by Global Partners</h3>
+            <div className="testimonial-grid">
+              <div className="testimonial-card">
+                <span className="quote-mark">“</span>
+                <p>
+                  Crest Bioscientific has been a reliable partner in our
+                  research journey. The quality of chemicals and consistency in
+                  supply is excellent.
+                </p>
+                <div className="author">
+                  <strong>Dr. Arjun Mehta</strong>
+                  <span>Procurement Head, Research Institute</span>
+                </div>
+              </div>
+              <div className="testimonial-card">
+                <span className="quote-mark">“</span>
+                <p>
+                  Their global sourcing network and professional support helped
+                  us streamline our lab operations seamlessly.
+                </p>
+                <div className="author">
+                  <strong>Laura Chen</strong>
+                  <span>Senior Scientist, Biotech Company</span>
+                </div>
+              </div>
+              <div className="testimonial-card">
+                <span className="quote-mark">“</span>
+                <p>
+                  On-time delivery and transparent communication make Crest our
+                  preferred supplier for critical chemicals.
+                </p>
+                <div className="author">
+                  <strong>Michael Anderson</strong>
+                  <span>Head of Supply Chain, Pharma Solutions</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Insights for the Scientific Community */}
+          <div className="insights">
+            <div className="insights-header">
+              <h3 className="section-subtitle">
+                Insights for the Scientific Community
+              </h3>
+              <Link to="/blog" className="view-all-link">
+                View All →
+              </Link>
+            </div>
+            <div className="insights-grid">
+              <div className="insight-card">
+                <div className="insight-image">
+                  <img src="/image4.jpg" alt="Sustainable Chemistry" />
+                </div>
+                <span className="insight-tag">Industry Trends</span>
+                <span className="insight-date">May 16, 2025</span>
+                <h4>
+                  Sustainable Chemistry: Building a Greener Future for
+                  Laboratories
+                </h4>
+                <p>
+                  Explore how sustainable practices and green chemistry are
+                  shaping the future of the chemical industry.
+                </p>
+                <Link to="/blog/1" className="read-more">
+                  Read Article →
+                </Link>
+              </div>
+              <div className="insight-card">
+                <div className="insight-image">
+                  <img src="/image1.jpg" alt="Technical Guide" />
+                </div>
+                <span className="insight-tag">Technical Guide</span>
+                <span className="insight-date">May 09, 2025</span>
+                <h4>Choosing the Right Reagent for Accurate Results</h4>
+                <p>
+                  A guide to selecting the right laboratory reagents for your
+                  applications to ensure accuracy and reproducibility.
+                </p>
+                <Link to="/blog/2" className="read-more">
+                  Read Article →
+                </Link>
+              </div>
+              <div className="insight-card">
+                <div className="insight-image">
+                  <img src="/image6.jpg" alt="Chemical Regulations" />
+                </div>
+                <span className="insight-tag">Regulatory Update</span>
+                <span className="insight-date">May 09, 2025</span>
+                <h4>Global Chemical Regulations: What You Need to Know</h4>
+                <p>
+                  Stay updated with the latest international regulations and
+                  compliance requirements for chemical imports.
+                </p>
+                <Link to="/blog/3" className="read-more">
+                  Read Article →
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Knowledge Hub */}
+          <div className="knowledge-hub">
+            <h3 className="section-subtitle">Knowledge Hub</h3>
+            <div className="knowledge-grid">
+              <div className="knowledge-item">
+                <span className="knowledge-number">01</span>
+                <div>
+                  <h4>Sustainable Practices in Modern Laboratories</h4>
+                  <p>
+                    How laboratories can adopt sustainable practices without
+                    compromising performance.
+                  </p>
+                </div>
+              </div>
+              <div className="knowledge-item">
+                <span className="knowledge-number">02</span>
+                <div>
+                  <h4>Understanding Purity Grades of Chemicals</h4>
+                  <p>
+                    A quick guide to purity grades and how they impact your
+                    results.
+                  </p>
+                </div>
+              </div>
+              <div className="knowledge-item">
+                <span className="knowledge-number">03</span>
+                <div>
+                  <h4>Chemical Compliance Made Simple</h4>
+                  <p>
+                    Key compliance standards and documentation for global trade.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

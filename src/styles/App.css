@@ -1199,3 +1199,8 @@ footer .footer-col ul li a:hover {
     padding: 8px 0;
   }
 }
+ 
+/* --- HIDE HAMBURGER ON DESKTOP --- */
+.menu-toggle-btn {
+  display: none;
+}

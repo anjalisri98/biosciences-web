@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 
 function Layout() {
-  // 1. Add state to toggle mobile menu
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProductsOpen, setIsProductsOpen] = useState(false); // Mobile submenu toggle
 
   return (
     <div className="App">
@@ -25,22 +25,21 @@ function Layout() {
               color: "#0AA5AD",
               fontWeight: "normal",
               fontSize: "1.4rem",
-              fontWeight: "bold",
             }}
           >
             &nbsp;BIOSCIENTIFIC
           </span>
         </div>
 
-        {/* 2. Add the mobile hamburger button */}
-        {/* <button
+        {/* Hamburger Button */}
+        <button
           className="menu-toggle-btn"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           <i className={isMenuOpen ? "fas fa-times" : "fas fa-bars"}></i>
-        </button> */}
+        </button>
 
-        {/* 3. Conditionally add 'open' class to the links */}
+        {/* Nav Links */}
         <ul className={`nav-links ${isMenuOpen ? "open" : ""}`}>
           <li>
             <Link to="/" onClick={() => setIsMenuOpen(false)}>
@@ -52,11 +51,52 @@ function Layout() {
               About Us
             </Link>
           </li>
-          <li>
-            <Link to="/products" onClick={() => setIsMenuOpen(false)}>
-              Products ▾
-            </Link>
+
+          {/* --- UPDATED: PRODUCTS DROPDOWN --- */}
+          <li className={`dropdown-li ${isProductsOpen ? "open" : ""}`}>
+            <span
+              className="dropdown-trigger"
+              onClick={() => setIsProductsOpen(!isProductsOpen)}
+            >
+              Products <i className="fas fa-chevron-down"></i>
+            </span>
+            <ul className="dropdown-menu">
+              <li>
+                <Link
+                  to="/products"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    setIsProductsOpen(false);
+                  }}
+                >
+                  All Products
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/products?category=Laboratory Chemicals"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    setIsProductsOpen(false);
+                  }}
+                >
+                  Laboratory Chemicals
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/products?category=Laboratory Glasswares"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    setIsProductsOpen(false);
+                  }}
+                >
+                  Laboratory Glasswares
+                </Link>
+              </li>
+            </ul>
           </li>
+
           <li>
             <Link to="/downloads" onClick={() => setIsMenuOpen(false)}>
               Downloads
@@ -67,22 +107,10 @@ function Layout() {
               Contact Us
             </Link>
           </li>
-          {/* <li className="search-icon">
-            <i className="fas fa-search"></i>
-          </li> */}
-          <li>
-            {/* <Link
-              to="/inquiry"
-              className="btn-primary"
-              style={{ padding: "10px 20px" }}
-            >
-              INQUIRY NOW
-            </Link> */}
-          </li>
         </ul>
       </nav>
 
-      {/* 4. Where actual page content (Home, About, etc.) gets loaded */}
+      {/* --- PAGE CONTENT --- */}
       <Outlet />
 
       {/* --- FOOTER --- */}
@@ -94,11 +122,6 @@ function Layout() {
                 className="logo"
                 style={{ color: "white", marginBottom: "15px" }}
               >
-                <img
-                  src="/logo_cb.png"
-                  alt="Logo"
-                  style={{ height: "25px", marginRight: "10px" }}
-                />
                 CREST&nbsp;
                 <span style={{ fontWeight: "normal" }}>BIOSCIENTIFIC</span>
               </div>

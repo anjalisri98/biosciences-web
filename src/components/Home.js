@@ -340,7 +340,7 @@
 // }
 
 // export default Home;
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api"; // Connects to your backend
 
@@ -348,7 +348,7 @@ function Home() {
   // --- 1. SLIDESHOW DATA ---
   const slides = [
     {
-      image: "/image1.jpg",
+      image: "/image14.jpg",
       title: "Innovative Chemical\nSolutions for a Better\nTomorrow",
       desc: "High performance chemicals and solvents for a wide range of industrial applications.",
     },
@@ -376,15 +376,45 @@ function Home() {
   ];
 
   const [currentSlide, setCurrentSlide] = useState(0);
+  const timerRef = useRef(null);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 4000);
-    return () => clearInterval(timer);
+  // --- 2. AUTO PLAY LOGIC ---
+  // const resetTimer = () => {
+  //   if (timerRef.current) clearInterval(timerRef.current);
+  //   timerRef.current = setInterval(() => {
+  //     setCurrentSlide((prev) => (prev + 1) % slides.length);
+  //   }, 5000);
+  // };
+
+  // useEffect(() => {
+  //   resetTimer();
+  //   return () => clearInterval(timerRef.current);
+  // }, [slides.length]);
+  const resetTimer = useCallback(() => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(
+      () => setCurrentSlide((prev) => (prev + 1) % slides.length),
+      5000,
+    );
   }, [slides.length]);
 
-  // --- 2. LIVE DATA FROM BACKEND ---
+  useEffect(() => {
+    resetTimer();
+    return () => clearInterval(timerRef.current);
+  }, [resetTimer]);
+
+  // --- 3. MANUAL SLIDER ARROWS ---
+  const handlePrev = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+    resetTimer();
+  };
+
+  const handleNext = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+    resetTimer();
+  };
+
+  // --- 4. LIVE DATA FROM BACKEND ---
   const [products, setProducts] = useState([]);
   const [events, setEvents] = useState([]);
 
@@ -404,12 +434,12 @@ function Home() {
   }, []);
 
   // --- 5. SPLIT PRODUCTS BY CATEGORY ---
-  const labChemicals = products.filter(
-    (p) => p.category?.trim() === "Laboratory Chemicals",
-  );
-  const labGlasswares = products.filter(
-    (p) => p.category?.trim() === "Laboratory Glasswares",
-  );
+  // const labChemicals = products.filter(
+  //   (p) => p.category?.trim() === "Laboratory Chemicals",
+  // );
+  // const labGlasswares = products.filter(
+  //   (p) => p.category?.trim() === "Laboratory Glasswares",
+  // );
 
   // --- 6. SCROLL ANIMATION LOGIC ---
   const featuresListRef = useRef(null);
@@ -505,7 +535,7 @@ function Home() {
 
   return (
     <>
-      {/* --- HERO SECTION (SLIDESHOW) --- */}
+      {/* --- HERO SECTION (SYNCED ANIMATION + ARROWS) --- */}
       <section className="hero">
         <div className="hero-background">
           {slides.map((slide, index) => {
@@ -541,6 +571,7 @@ function Home() {
             );
           })}
         </div>
+
         <div className="hero-content">
           <h1 style={{ whiteSpace: "pre-line" }}>
             {slides[currentSlide].title.split("\n").map((line, idx) => {
@@ -570,10 +601,20 @@ function Home() {
           <p key={currentSlide + "-desc"} className="hero-text-anim">
             {slides[currentSlide].desc}
           </p>
-          <Link to="/products" className="btn-primary">
-            EXPLORE PRODUCTS →
-          </Link>
+          {!slides[currentSlide].linkTo && (
+            <Link to="/products" className="btn-primary">
+              EXPLORE PRODUCTS →
+            </Link>
+          )}
         </div>
+
+        <button className="hero-arrow hero-arrow-left" onClick={handlePrev}>
+          <i className="fas fa-chevron-left"></i>
+        </button>
+        <button className="hero-arrow hero-arrow-right" onClick={handleNext}>
+          <i className="fas fa-chevron-right"></i>
+        </button>
+
         <div className="hero-indicators">
           {slides.map((_, index) => (
             <span
@@ -612,37 +653,33 @@ function Home() {
               gap: "10px",
               background: "transparent",
               boxShadow: "none",
+              justifyContent: "center", // Centers the keywords
             }}
           >
             <div
               className="search-features"
               style={{
                 color: "#002D5A",
-                fontSize: "0.8rem",
-                fontWeight: "500",
+                fontSize: "0.9rem", // Slightly larger
+                fontWeight: "600",
+                width: "100%",
+                justifyContent: "center", 
+                gap: "35px", 
+                flexWrap: "wrap",
               }}
             >
-              <span>
+              <span className="keyword-item">
                 <i className="fas fa-flask"></i> Wide Range
               </span>
-              <span>
+              <span className="keyword-item">
                 <i className="fas fa-check-circle"></i> Premium
               </span>
-              <span>
+              <span className="keyword-item">
                 <i className="fas fa-truck"></i> Fast Delivery
               </span>
-              <span>
+              <span className="keyword-item">
                 <i className="fas fa-headset"></i> Support
               </span>
-            </div>
-            <div className="search-box">
-              <input type="text" placeholder="Search..." />
-              <select>
-                <option>All Categories</option>
-              </select>
-              <button>
-                <i className="fas fa-search"></i> SEARCH
-              </button>
             </div>
           </div>
         </div>
@@ -660,7 +697,7 @@ function Home() {
         </div>
 
         {/* Category 1: Laboratory Chemicals */}
-        {/* {labChemicals.length > 0 && (
+      {/* {labChemicals.length > 0 && (
           <div style={{ marginBottom: "40px" }}>
             <h3
               style={{
@@ -694,8 +731,8 @@ function Home() {
           </div>
         )} */}
 
-        {/* Category 2: Laboratory Glasswares */}
-        {/* {labGlasswares.length > 0 && (
+      {/* Category 2: Laboratory Glasswares */}
+      {/* {labGlasswares.length > 0 && (
           <div>
             <h3
               style={{
@@ -730,7 +767,7 @@ function Home() {
         )}
 
         {/* Fallback if no products exist in those exact categories */}
-        {/* {labChemicals.length === 0 &&
+      {/* {labChemicals.length === 0 &&
           labGlasswares.length === 0 &&
           products.length > 0 && (
             <div
@@ -741,7 +778,7 @@ function Home() {
             </div>
           )}
       </section>  */}
-       
+
       {/* ============================================================
           🆕  INDUSTRIES WE SERVE  — (your new section)
           ============================================================ */}
@@ -823,9 +860,9 @@ function Home() {
                   </div>
                   <h3>{industry.title}</h3>
                   <p>{industry.desc}</p>
-                  <span className="industry-learn-more">
+                  {/* <span className="industry-learn-more">
                     Learn More <i className="fas fa-arrow-right"></i>
-                  </span>
+                  </span> */}
                 </div>
               </div>
             ))}
@@ -967,158 +1004,161 @@ function Home() {
       </section>
 
       {/* --- PARTNERS & INSIGHTS SECTION --- */}
+            {/* --- PARTNERS & INSIGHTS SECTION --- */}
       <section className="partners-section">
         <div className="container">
           {/* CTA Banner */}
           <div className="cta-banner">
             <h2>Ready to Partner with Us?</h2>
-            <p>
-              Get in touch today for custom quotes, bulk orders, and technical
-              support.
-            </p>
+            <p>Get in touch today for custom quotes, bulk orders, and technical support.</p>
             <Link to="/contact" className="btn-primary cta-btn">
               CONTACT SALES TEAM →
             </Link>
           </div>
 
-          {/* Testimonials */}
-          <div className="testimonials">
-            <h3 className="section-subtitle">Trusted by Global Partners</h3>
-            <div className="testimonial-grid">
-              <div className="testimonial-card">
-                <span className="quote-mark">“</span>
-                <p>
-                  Crest Bioscientific has been a reliable partner in our
-                  research journey. The quality of chemicals and consistency in
-                  supply is excellent.
-                </p>
-                <div className="author">
-                  <strong>Dr. Arjun Mehta</strong>
-                  <span>Procurement Head, Research Institute</span>
-                </div>
-              </div>
-              <div className="testimonial-card">
-                <span className="quote-mark">“</span>
-                <p>
-                  Their global sourcing network and professional support helped
-                  us streamline our lab operations seamlessly.
-                </p>
-                <div className="author">
-                  <strong>Laura Chen</strong>
-                  <span>Senior Scientist, Biotech Company</span>
-                </div>
-              </div>
-              <div className="testimonial-card">
-                <span className="quote-mark">“</span>
-                <p>
-                  On-time delivery and transparent communication make Crest our
-                  preferred supplier for critical chemicals.
-                </p>
-                <div className="author">
-                  <strong>Michael Anderson</strong>
-                  <span>Head of Supply Chain, Pharma Solutions</span>
+          {/* Testimonials & Stats - 3 Column Layout */}
+          <h3 className="main-section-title">Trusted by Scientists, Chosen Worldwide.</h3>
+          <div className="testimonials-layout">
+            
+            {/* LEFT: Featured Testimonial */}
+            <div className="featured-testimonial">
+              <span className="quote-mark">“</span>
+              <p>
+                The product quality, documentation, and technical support provided
+                by Crest Bioscientific are truly world-class. They understand our
+                needs and deliver beyond expectations.
+              </p>
+              <div className="author">
+                <img src="/image1.jpg" alt="Prof. David Miller" />
+                <div>
+                  <strong>Prof. David Miller <span className="flag">🇬🇧</span></strong>
+                  <span>Head of Research, Research Institute</span>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Insights for the Scientific Community */}
-          <div className="insights">
-            <div className="insights-header">
-              <h3 className="section-subtitle">
-                Insights for the Scientific Community
-              </h3>
-              <Link to="/blog" className="view-all-link">
-                View All →
-              </Link>
-            </div>
-            <div className="insights-grid">
-              <div className="insight-card">
-                <div className="insight-image">
-                  <img src="/image4.jpg" alt="Sustainable Chemistry" />
+            {/* MIDDLE: Small Testimonials */}
+            <div className="small-testimonials">
+              <div className="small-testimonial">
+                <img src="/image2.jpg" alt="Anika Sharma" className="author-img" />
+                <div>
+                  <span className="quote-mark">“</span>
+                  <p>Reliable sourcing and timely shipments—exactly what we need for our lab operations.</p>
+                  <div className="author">
+                    <strong>Anika Sharma <span className="flag">🇮🇳</span></strong>
+                    <span>Purchase Manager, Biotech Co.</span>
+                  </div>
                 </div>
-                <span className="insight-tag">Industry Trends</span>
-                <span className="insight-date">May 16, 2025</span>
-                <h4>
-                  Sustainable Chemistry: Building a Greener Future for
-                  Laboratories
-                </h4>
-                <p>
-                  Explore how sustainable practices and green chemistry are
-                  shaping the future of the chemical industry.
-                </p>
-                <Link to="/blog/1" className="read-more">
-                  Read Article →
-                </Link>
               </div>
-              <div className="insight-card">
-                <div className="insight-image">
-                  <img src="/image1.jpg" alt="Technical Guide" />
+              <div className="small-testimonial">
+                <img src="/image3.jpg" alt="James Lee" className="author-img" />
+                <div>
+                  <span className="quote-mark">“</span>
+                  <p>Working with Crest has been a smooth and transparent experience from day one.</p>
+                  <div className="author">
+                    <strong>James Lee <span className="flag">🇰🇷</span></strong>
+                    <span>Supply Chain Lead, Industrial Client</span>
+                  </div>
                 </div>
-                <span className="insight-tag">Technical Guide</span>
-                <span className="insight-date">May 09, 2025</span>
-                <h4>Choosing the Right Reagent for Accurate Results</h4>
-                <p>
-                  A guide to selecting the right laboratory reagents for your
-                  applications to ensure accuracy and reproducibility.
-                </p>
-                <Link to="/blog/2" className="read-more">
-                  Read Article →
-                </Link>
-              </div>
-              <div className="insight-card">
-                <div className="insight-image">
-                  <img src="/image6.jpg" alt="Chemical Regulations" />
-                </div>
-                <span className="insight-tag">Regulatory Update</span>
-                <span className="insight-date">May 09, 2025</span>
-                <h4>Global Chemical Regulations: What You Need to Know</h4>
-                <p>
-                  Stay updated with the latest international regulations and
-                  compliance requirements for chemical imports.
-                </p>
-                <Link to="/blog/3" className="read-more">
-                  Read Article →
-                </Link>
               </div>
             </div>
+
+            {/* RIGHT: Stats Panel */}
+            <div className="stats-panel">
+              <div>
+                <h3>Trusted Across</h3>
+                <div className="big-stat">25+</div>
+                <div className="stat-label">Countries</div>
+                <img src="/image23.jpg" alt="Globe" className="globe-img" />
+                <p>Delivering quality chemicals to laboratories and industries worldwide.</p>
+              </div>
+              <div className="mini-stats">
+                <div className="mini-stat">
+                  <strong>5K+</strong>
+                  <span>Products</span>
+                </div>
+                <div className="mini-stat">
+                  <strong>1K+</strong>
+                  <span>Happy Clients</span>
+                </div>
+                <div className="mini-stat">
+                  <strong>99%</strong>
+                  <span>On-time Delivery</span>
+                </div>
+              </div>
+            </div>
+
           </div>
 
           {/* Knowledge Hub */}
           <div className="knowledge-hub">
-            <h3 className="section-subtitle">Knowledge Hub</h3>
-            <div className="knowledge-grid">
-              <div className="knowledge-item">
-                <span className="knowledge-number">01</span>
-                <div>
-                  <h4>Sustainable Practices in Modern Laboratories</h4>
-                  <p>
-                    How laboratories can adopt sustainable practices without
-                    compromising performance.
-                  </p>
+            <div className="knowledge-hub-header">
+              <h2>Knowledge Hub</h2>
+              <Link to="/blog" className="view-all-link">
+                View All Articles →
+              </Link>
+            </div>
+
+            <div className="knowledge-articles">
+              {/* Article 1 */}
+              <div className="knowledge-article-card">
+                <div className="knowledge-top-row">
+                  <span className="knowledge-number">01</span>
+                  <div className="knowledge-meta">
+                    <span className="insight-tag">Industry Trends</span>
+                    <span className="insight-date">May 16, 2025</span>
+                  </div>
                 </div>
+                <h4>Sustainable Practices in Modern Laboratories</h4>
+                <p>How laboratories can adopt sustainable practices without compromising performance.</p>
+                <div className="knowledge-image">
+                  <img src="/image4.jpg" alt="Sustainable Labs" />
+                </div>
+                <Link to="/blog/1" className="knowledge-link">
+                  <i className="fas fa-arrow-right"></i>
+                </Link>
               </div>
-              <div className="knowledge-item">
-                <span className="knowledge-number">02</span>
-                <div>
-                  <h4>Understanding Purity Grades of Chemicals</h4>
-                  <p>
-                    A quick guide to purity grades and how they impact your
-                    results.
-                  </p>
+
+              {/* Article 2 */}
+              <div className="knowledge-article-card">
+                <div className="knowledge-top-row">
+                  <span className="knowledge-number">02</span>
+                  <div className="knowledge-meta">
+                    <span className="insight-tag">Technical Guide</span>
+                    <span className="insight-date">May 09, 2025</span>
+                  </div>
                 </div>
+                <h4>Understanding Purity Grades of Chemicals</h4>
+                <p>A quick guide to purity grades and how they impact your results.</p>
+                <div className="knowledge-image">
+                  <img src="/image1.jpg" alt="Purity Grades" />
+                </div>
+                <Link to="/blog/2" className="knowledge-link">
+                  <i className="fas fa-arrow-right"></i>
+                </Link>
               </div>
-              <div className="knowledge-item">
-                <span className="knowledge-number">03</span>
-                <div>
-                  <h4>Chemical Compliance Made Simple</h4>
-                  <p>
-                    Key compliance standards and documentation for global trade.
-                  </p>
+
+              {/* Article 3 */}
+              <div className="knowledge-article-card">
+                <div className="knowledge-top-row">
+                  <span className="knowledge-number">03</span>
+                  <div className="knowledge-meta">
+                    <span className="insight-tag">Regulatory Update</span>
+                    <span className="insight-date">Apr 28, 2025</span>
+                  </div>
                 </div>
+                <h4>Chemical Compliance Made Simple</h4>
+                <p>Key compliance standards and documentation for global trade.</p>
+                <div className="knowledge-image">
+                  <img src="/image11.jpg" alt="Compliance" />
+                </div>
+                <Link to="/blog/3" className="knowledge-link">
+                  <i className="fas fa-arrow-right"></i>
+                </Link>
               </div>
             </div>
           </div>
+
         </div>
       </section>
 

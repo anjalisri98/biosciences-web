@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { api } from "../api"; // Make sure this path is correct!
-import "../styles/Admin.css"; // Ensure your CSS is imported
+import { api } from "../api";
+import "../styles/Admin.css";
 
 // ==========================================
-// REUSABLE FORM COMPONENTS (Defined at top!)
+// REUSABLE FORM COMPONENTS
 // ==========================================
 function Field({ label, name, type = "text", defaultValue, required }) {
   return (
     <div className="form-group">
       <label>{label}</label>
-      <input type={type} defaultValue={defaultValue || ""} data-field={name} required={required} />
+      <input
+        type={type}
+        defaultValue={defaultValue || ""}
+        data-field={name}
+        required={required}
+      />
     </div>
   );
 }
@@ -18,8 +23,16 @@ function SelectField({ label, name, defaultValue, options, required }) {
   return (
     <div className="form-group">
       <label>{label}</label>
-      <select defaultValue={defaultValue || options[0]} data-field={name} required={required}>
-        {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+      <select
+        defaultValue={defaultValue || options[0]}
+        data-field={name}
+        required={required}
+      >
+        {options.map((opt) => (
+          <option key={opt} value={opt}>
+            {opt}
+          </option>
+        ))}
       </select>
     </div>
   );
@@ -29,7 +42,12 @@ function TextAreaField({ label, name, defaultValue, rows = 4, required }) {
   return (
     <div className="form-group">
       <label>{label}</label>
-      <textarea defaultValue={defaultValue || ""} data-field={name} rows={rows} required={required}></textarea>
+      <textarea
+        defaultValue={defaultValue || ""}
+        data-field={name}
+        rows={rows}
+        required={required}
+      ></textarea>
     </div>
   );
 }
@@ -42,7 +60,8 @@ function Modal({ title, children, onSave, onClose }) {
     for (let el of formElements) {
       if (el.dataset.field) formData[el.dataset.field] = el.value;
     }
-    onSave(e, formData);
+    const fileInput = document.getElementById("modalFileInput");
+    onSave(e, formData, fileInput);
   };
 
   return (
@@ -52,8 +71,12 @@ function Modal({ title, children, onSave, onClose }) {
         <form onSubmit={handleSubmit}>
           {children}
           <div className="modal-actions">
-            <button type="button" className="btn-cancel" onClick={onClose}>Cancel</button>
-            <button type="submit" className="btn-save">Save</button>
+            <button type="button" className="btn-cancel" onClick={onClose}>
+              Cancel
+            </button>
+            <button type="submit" className="btn-save">
+              Save
+            </button>
           </div>
         </form>
       </div>
@@ -65,29 +88,25 @@ function AdminDashboard({ onLogout }) {
   const [activeTab, setActiveTab] = useState("products");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalType, setModalType] = useState("add"); // 'add' or 'edit'
+  const [modalType, setModalType] = useState("add");
   const [currentItem, setCurrentItem] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // --- Live Data States ---
   const [products, setProducts] = useState([]);
   const [packagings, setPackagings] = useState([]);
   const [catalogues, setCatalogues] = useState([]);
   const [events, setEvents] = useState([]);
   const [enquiries, setEnquiries] = useState([]);
   const [blogs, setBlogs] = useState([]);
-
-  // --- NEW: Category Filter State ---
   const [categoryFilter, setCategoryFilter] = useState("All");
 
-  // --- 1. Fetch Data when Active Tab Changes ---
+  // --- 1. Fetch Data (USING /list) ---
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
         let endpoint = "";
         let setter = null;
-
         switch (activeTab) {
           case "products":
             endpoint = "/dashboard/products/list";
@@ -116,7 +135,6 @@ function AdminDashboard({ onLogout }) {
           default:
             break;
         }
-
         if (endpoint && setter) {
           const res = await api.get(endpoint);
           setter(res.data);
@@ -127,36 +145,35 @@ function AdminDashboard({ onLogout }) {
         setIsLoading(false);
       }
     };
-
     fetchData();
   }, [activeTab]);
 
-  // --- 2. Filtering Logic for Products ---
+  // --- Filtering Logic for Products ---
   const filteredProducts =
     categoryFilter === "All"
       ? products
       : products.filter((p) => p.category === categoryFilter);
 
-  // --- 3. Modal & Save Logic ---
   const openAddModal = () => {
     setModalType("add");
     setCurrentItem(null);
     setIsModalOpen(true);
   };
-
   const openEditModal = (item) => {
     setModalType("edit");
     setCurrentItem(item);
     setIsModalOpen(true);
   };
 
+  // --- 2. The Central Save Logic (USING /add and /update/:id) ---
   const handleSave = async (e, formData, fileInput) => {
     e.preventDefault();
     try {
       let finalPayload = { ...formData };
       let setter = null;
 
-      // 1. If a file was selected, upload it first to MinIO
+      // Step A: Upload Image if a file was selected
+      // UPDATED TO USE YOUR EXACT UPLOAD API
       if (fileInput && fileInput.files && fileInput.files[0]) {
         const file = fileInput.files[0];
         const fileFormData = new FormData();
@@ -166,22 +183,29 @@ function AdminDashboard({ onLogout }) {
         if (activeTab === "catalogue") folder = "catalogues";
         else if (activeTab === "events") folder = "events";
         else if (activeTab === "packaging") folder = "packaging";
+        else if (activeTab === "blogs") folder = "blogs";
 
         fileFormData.append("folder", folder);
 
-        const uploadRes = await api.post("/uploads", fileFormData, true);
+        // ✅ CALLING YOUR EXACT UPLOAD API HERE
+        const uploadRes = await api.post(
+          "/dashboard/common/upload",
+          fileFormData,
+          true,
+        );
         const fileUrl = uploadRes.data.url;
 
         if (activeTab === "catalogue") finalPayload.fileUrl = fileUrl;
         else if (activeTab === "events" || activeTab === "packaging")
           finalPayload.imageUrl = fileUrl;
+        else if (activeTab === "blogs") finalPayload.coverImage = fileUrl;
       }
 
-      // 2. Determine endpoint and setter
+      // Step B: Determine endpoint
       let endpoint = "";
       switch (activeTab) {
         case "products":
-          endpoint = "/dashboard/products/update";
+          endpoint = "/dashboard/products";
           setter = setProducts;
           break;
         case "packaging":
@@ -208,13 +232,18 @@ function AdminDashboard({ onLogout }) {
           return;
       }
 
-      // 3. Call Add or Update API
+      // Step C: Call Add or Update API
       let res;
       if (modalType === "add") {
-        res = await api.post(endpoint, finalPayload);
+        // POST to /add
+        res = await api.post(`${endpoint}/add`, finalPayload);
         setter((prev) => [...prev, res.data]);
       } else {
-        res = await api.put(`${endpoint}/${currentItem._id}`, finalPayload);
+        // PUT to /update/:id
+        res = await api.put(
+          `${endpoint}/update/${currentItem._id}`,
+          finalPayload,
+        );
         setter((prev) =>
           prev.map((item) => (item._id === res.data._id ? res.data : item)),
         );
@@ -226,7 +255,7 @@ function AdminDashboard({ onLogout }) {
     }
   };
 
-  // --- 4. Delete Logic ---
+  // --- 3. Delete Logic (USING /:id) ---
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this item?")) return;
     try {
@@ -254,8 +283,9 @@ function AdminDashboard({ onLogout }) {
           setter = setEnquiries;
           break;
         case "blogs":
-          endpoint = "/dashboard/blogs"; 
-          setter = setBlogs; break;
+          endpoint = "/dashboard/blogs";
+          setter = setBlogs;
+          break;
         default:
           return;
       }
@@ -266,7 +296,6 @@ function AdminDashboard({ onLogout }) {
     }
   };
 
-  // --- 5. Render Content Helper ---
   const renderContent = () => {
     if (isLoading) {
       return (
@@ -276,11 +305,10 @@ function AdminDashboard({ onLogout }) {
       );
     }
 
-    // Common Modal Logic Render
     const renderModal = (title, fields, extraFields = null) => (
       <Modal
         title={title}
-        onSave={(e, data, fileInput) => handleSave(e, data, fileInput)}
+        onSave={handleSave}
         onClose={() => setIsModalOpen(false)}
       >
         {fields.map((field) => (
@@ -303,11 +331,10 @@ function AdminDashboard({ onLogout }) {
       </Modal>
     );
 
-    // 1. Products (WITH CATEGORY DROPDOWN FILTER)
+    // --- PRODUCTS TAB ---
     if (activeTab === "products") {
       return (
         <div>
-          {/* --- TOOLBAR: Add Button + Category Dropdown --- */}
           <div
             style={{
               display: "flex",
@@ -321,7 +348,6 @@ function AdminDashboard({ onLogout }) {
             <button className="btn-primary-admin" onClick={openAddModal}>
               + Add Product
             </button>
-
             <div
               style={{
                 display: "flex",
@@ -365,7 +391,6 @@ function AdminDashboard({ onLogout }) {
               </select>
             </div>
           </div>
-
           <div className="admin-table-wrap">
             <table className="admin-table">
               <thead>
@@ -378,7 +403,6 @@ function AdminDashboard({ onLogout }) {
                 </tr>
               </thead>
               <tbody>
-                {/* UPDATED: Using filteredProducts instead of products */}
                 {filteredProducts.map((p) => (
                   <tr key={p._id}>
                     <td>{p.name}</td>
@@ -403,18 +427,7 @@ function AdminDashboard({ onLogout }) {
                 ))}
               </tbody>
             </table>
-
-            {/* If filtering shows empty results */}
-            {filteredProducts.length === 0 && products.length > 0 && (
-              <div
-                style={{ textAlign: "center", padding: "30px", color: "#888" }}
-              >
-                No products found in the <strong>"{categoryFilter}"</strong>{" "}
-                category.
-              </div>
-            )}
           </div>
-
           {isModalOpen &&
             renderModal(modalType === "add" ? "Add Product" : "Edit Product", [
               { name: "name", label: "Product Name", required: true },
@@ -431,7 +444,7 @@ function AdminDashboard({ onLogout }) {
       );
     }
 
-    // 2. Packaging
+    // --- PACKAGING TAB ---
     if (activeTab === "packaging") {
       return (
         <div>
@@ -499,7 +512,7 @@ function AdminDashboard({ onLogout }) {
       );
     }
 
-    // 3. Catalogue
+    // --- CATALOGUE TAB ---
     if (activeTab === "catalogue") {
       return (
         <div>
@@ -558,7 +571,7 @@ function AdminDashboard({ onLogout }) {
       );
     }
 
-    // 4. Events
+    // --- EVENTS TAB ---
     if (activeTab === "events") {
       return (
         <div>
@@ -624,7 +637,7 @@ function AdminDashboard({ onLogout }) {
       );
     }
 
-    // 5. Enquiries
+    // --- ENQUIRIES TAB ---
     if (activeTab === "enquiries") {
       return (
         <div>
@@ -678,7 +691,7 @@ function AdminDashboard({ onLogout }) {
           {isModalOpen && (
             <Modal
               title="Update Enquiry"
-              onSave={(e, data) => handleSave(e, data, null)}
+              onSave={handleSave}
               onClose={() => setIsModalOpen(false)}
             >
               <div className="form-group">
@@ -708,52 +721,133 @@ function AdminDashboard({ onLogout }) {
       );
     }
 
-    // 6. Blogs
-    // --- BLOGS TAB (NEW ADDED) ---
+    // --- BLOGS TAB ---
     if (activeTab === "blogs") {
       return (
         <div>
-          <button className="btn-primary-admin" onClick={openAddModal}>+ Add Blog</button>
+          <button className="btn-primary-admin" onClick={openAddModal}>
+            + Add Blog
+          </button>
           <div className="admin-table-wrap">
             <table className="admin-table">
-              <thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Category</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
               <tbody>
                 {blogs.map((b) => (
                   <tr key={b._id}>
-                    <td><strong>{b.title}</strong></td>
+                    <td>
+                      <strong>{b.title}</strong>
+                    </td>
                     <td>{b.category}</td>
                     <td>
-                      <span style={{ 
-                        padding: "4px 10px", 
-                        borderRadius: "20px", 
-                        fontSize: "0.8rem",
-                        fontWeight: "600",
-                        backgroundColor: b.status === "published" ? "#d4edda" : b.status === "draft" ? "#fff3cd" : "#f8d7da",
-                        color: b.status === "published" ? "#155724" : b.status === "draft" ? "#856404" : "#721c24"
-                      }}>
+                      <span
+                        style={{
+                          padding: "4px 10px",
+                          borderRadius: "20px",
+                          fontSize: "0.8rem",
+                          fontWeight: "600",
+                          backgroundColor:
+                            b.status === "published"
+                              ? "#d4edda"
+                              : b.status === "draft"
+                                ? "#fff3cd"
+                                : "#f8d7da",
+                          color:
+                            b.status === "published"
+                              ? "#155724"
+                              : b.status === "draft"
+                                ? "#856404"
+                                : "#721c24",
+                        }}
+                      >
                         {b.status}
                       </span>
                     </td>
-                    <td>{b.createdAt ? new Date(b.createdAt).toLocaleDateString() : ""}</td>
+                    <td>
+                      {b.createdAt
+                        ? new Date(b.createdAt).toLocaleDateString()
+                        : ""}
+                    </td>
                     <td className="actions">
-                      <button className="btn-edit" onClick={() => openEditModal(b)}><i className="fas fa-edit"></i></button>
-                      <button className="btn-delete" onClick={() => handleDelete(b._id)}><i className="fas fa-trash"></i></button>
+                      <button
+                        className="btn-edit"
+                        onClick={() => openEditModal(b)}
+                      >
+                        <i className="fas fa-edit"></i>
+                      </button>
+                      <button
+                        className="btn-delete"
+                        onClick={() => handleDelete(b._id)}
+                      >
+                        <i className="fas fa-trash"></i>
+                      </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          {isModalOpen &&
-            <Modal title={modalType === "add" ? "Add Blog" : "Edit Blog"} onSave={handleSave} onClose={() => setIsModalOpen(false)}>
-              <Field label="Blog Title" name="title" defaultValue={currentItem?.title} required />
-              <SelectField label="Category" name="category" defaultValue={currentItem?.category} options={["Industry Trends", "Technical Guide", "Regulatory Update", "Company News"]} required />
-              <SelectField label="Status" name="status" defaultValue={currentItem?.status || "draft"} options={["draft", "published", "archived"]} required />
-              <Field label="Cover Image URL" name="coverImage" defaultValue={currentItem?.coverImage} />
-              <Field label="Excerpt" name="excerpt" defaultValue={currentItem?.excerpt} />
-              <TextAreaField label="Content" name="content" defaultValue={currentItem?.content} required rows={8} />
+          {isModalOpen && (
+            <Modal
+              title={modalType === "add" ? "Add Blog" : "Edit Blog"}
+              onSave={handleSave}
+              onClose={() => setIsModalOpen(false)}
+            >
+              <Field
+                label="Blog Title"
+                name="title"
+                defaultValue={currentItem?.title}
+                required
+              />
+              <SelectField
+                label="Category"
+                name="category"
+                defaultValue={currentItem?.category}
+                options={[
+                  "Industry Trends",
+                  "Technical Guide",
+                  "Regulatory Update",
+                  "Company News",
+                ]}
+                required
+              />
+              <SelectField
+                label="Status"
+                name="status"
+                defaultValue={currentItem?.status || "draft"}
+                options={["draft", "published", "archived"]}
+                required
+              />
+              <Field
+                label="Cover Image URL (Optional - will be overridden if you upload)"
+                name="coverImage"
+                defaultValue={currentItem?.coverImage}
+              />
+              <div className="form-group">
+                <label>Upload Blog Image (to MinIO)</label>
+                <input type="file" id="modalFileInput" accept="image/*" />
+              </div>
+              <Field
+                label="Excerpt"
+                name="excerpt"
+                defaultValue={currentItem?.excerpt}
+              />
+              <TextAreaField
+                label="Content"
+                name="content"
+                defaultValue={currentItem?.content}
+                required
+                rows={8}
+              />
             </Modal>
-          }
+          )}
         </div>
       );
     }
@@ -761,33 +855,36 @@ function AdminDashboard({ onLogout }) {
 
   return (
     <div className="admin-layout">
-      {/* --- SIDEBAR --- */}
       <aside className={`admin-sidebar ${isSidebarOpen ? "open" : ""}`}>
         <div className="admin-logo">
           <i className="fas fa-cube"></i> CREST Admin
         </div>
         <ul className="admin-menu">
-          {["products", "packaging", "catalogue", "events", "enquiries", "blogs"].map(
-            (tab) => (
-              <li
-                key={tab}
-                className={activeTab === tab ? "active" : ""}
-                onClick={() => {
-                  setActiveTab(tab);
-                  setIsSidebarOpen(false);
-                }}
-              >
-                <i
-                  className={`fas fa-${tab === "products" ? "box" : tab === "packaging" ? "box-open" : tab === "catalogue" ? "file-pdf" : tab === "events" ? "calendar-alt" : tab === "blogs" ? "blog" : "envelope"}`}
-                ></i>
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </li>
-            ),
-          )}
+          {[
+            "products",
+            "packaging",
+            "catalogue",
+            "events",
+            "enquiries",
+            "blogs",
+          ].map((tab) => (
+            <li
+              key={tab}
+              className={activeTab === tab ? "active" : ""}
+              onClick={() => {
+                setActiveTab(tab);
+                setIsSidebarOpen(false);
+              }}
+            >
+              <i
+                className={`fas fa-${tab === "products" ? "box" : tab === "packaging" ? "box-open" : tab === "catalogue" ? "file-pdf" : tab === "events" ? "calendar-alt" : tab === "blogs" ? "blog" : "envelope"}`}
+              ></i>
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </li>
+          ))}
         </ul>
       </aside>
 
-      {/* --- MAIN AREA --- */}
       <main className="admin-main">
         <header className="admin-header">
           <div>

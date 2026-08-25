@@ -3,19 +3,31 @@
 /* BLOG HERO BANNER */
 .blog-hero {
   position: relative;
-  background: linear-gradient(135deg, #002d5a 0%, #0aa5ad 100%);
+  background-image: url("../../public/image16.jpg");
+  background-size: cover;
+  background-position: center;
   padding: 80px 20px;
   text-align: center;
   color: white;
 }
-.blog-hero h1 {
-  font-size: 3rem;
-  margin-bottom: 15px;
+
+/* Dark Blue overlay to make text readable */
+.blog-hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 45, 90, 0.6);
+  z-index: 1;
 }
-.blog-hero p {
-  font-size: 1.2rem;
-  opacity: 0.9;
-  margin-bottom: 30px;
+
+.blog-hero h1,
+.blog-hero p,
+.blog-search-container {
+  position: relative;
+  z-index: 2;
 }
 
 /* Hero Search Bar */

@@ -417,6 +417,7 @@ function Home() {
   // --- 4. LIVE DATA FROM BACKEND ---
   const [products, setProducts] = useState([]);
   const [events, setEvents] = useState([]);
+  const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -426,6 +427,8 @@ function Home() {
 
         const eventRes = await api.get("/dashboard/events/list");
         setEvents(eventRes.data || []);
+          const blogRes = await api.get('/dashboard/blogs/list'); 
+        setBlogs(blogRes.data || []);
       } catch (err) {
         console.error("Failed to fetch data from backend:", err.message);
       }
@@ -533,6 +536,21 @@ function Home() {
     };
   }, []); // Empty dependency array – runs once on mount
 
+   // --- 4. UNIVERSAL SCROLL ANIMATION OBSERVER ---
+  const animatedSectionsRef = useRef(null);
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add("animate-in");
+      });
+    }, { threshold: 0.15 });
+    if (animatedSectionsRef.current) {
+      const targets = animatedSectionsRef.current.querySelectorAll(".feature-text, .quality-card, .industry-image-card, .featured-card, .testimonial-card");
+      targets.forEach((item, i) => { item.style.transitionDelay = i * 0.1 + "s"; observer.observe(item); });
+    }
+    return () => { /* cleanup */ };
+  }, []);
+  
   return (
     <>
       {/* --- HERO SECTION (SYNCED ANIMATION + ARROWS) --- */}
@@ -1004,7 +1022,6 @@ function Home() {
       </section>
 
       {/* --- PARTNERS & INSIGHTS SECTION --- */}
-            {/* --- PARTNERS & INSIGHTS SECTION --- */}
       <section className="partners-section">
         <div className="container">
           {/* CTA Banner */}
@@ -1090,74 +1107,38 @@ function Home() {
 
           </div>
 
-          {/* Knowledge Hub */}
-          <div className="knowledge-hub">
-            <div className="knowledge-hub-header">
-              <h2>Knowledge Hub</h2>
-              <Link to="/blog" className="view-all-link">
-                View All Articles →
-              </Link>
-            </div>
-
-            <div className="knowledge-articles">
-              {/* Article 1 */}
-              <div className="knowledge-article-card">
-                <div className="knowledge-top-row">
-                  <span className="knowledge-number">01</span>
-                  <div className="knowledge-meta">
-                    <span className="insight-tag">Industry Trends</span>
-                    <span className="insight-date">May 16, 2025</span>
-                  </div>
-                </div>
-                <h4>Sustainable Practices in Modern Laboratories</h4>
-                <p>How laboratories can adopt sustainable practices without compromising performance.</p>
-                <div className="knowledge-image">
-                  <img src="/image4.jpg" alt="Sustainable Labs" />
-                </div>
-                <Link to="/blog/1" className="knowledge-link">
-                  <i className="fas fa-arrow-right"></i>
-                </Link>
-              </div>
-
-              {/* Article 2 */}
-              <div className="knowledge-article-card">
-                <div className="knowledge-top-row">
-                  <span className="knowledge-number">02</span>
-                  <div className="knowledge-meta">
-                    <span className="insight-tag">Technical Guide</span>
-                    <span className="insight-date">May 09, 2025</span>
-                  </div>
-                </div>
-                <h4>Understanding Purity Grades of Chemicals</h4>
-                <p>A quick guide to purity grades and how they impact your results.</p>
-                <div className="knowledge-image">
-                  <img src="/image1.jpg" alt="Purity Grades" />
-                </div>
-                <Link to="/blog/2" className="knowledge-link">
-                  <i className="fas fa-arrow-right"></i>
-                </Link>
-              </div>
-
-              {/* Article 3 */}
-              <div className="knowledge-article-card">
-                <div className="knowledge-top-row">
-                  <span className="knowledge-number">03</span>
-                  <div className="knowledge-meta">
-                    <span className="insight-tag">Regulatory Update</span>
-                    <span className="insight-date">Apr 28, 2025</span>
-                  </div>
-                </div>
-                <h4>Chemical Compliance Made Simple</h4>
-                <p>Key compliance standards and documentation for global trade.</p>
-                <div className="knowledge-image">
-                  <img src="/image11.jpg" alt="Compliance" />
-                </div>
-                <Link to="/blog/3" className="knowledge-link">
-                  <i className="fas fa-arrow-right"></i>
-                </Link>
-              </div>
-            </div>
+ {/* --- KNOWLEDGE HUB (REPLACED WITH API DATA) --- */}
+           <section className="knowledge-hub">
+        <div className="container">
+          <div className="knowledge-hub-header">
+            <h3 className="section-subtitle">Knowledge Hub</h3>
+            <Link to="/blog" className="view-all-link">View All Articles →</Link>
           </div>
+
+          <div className="knowledge-articles" ref={animatedSectionsRef}>
+            {blogs.slice(0, 3).map((blog) => (
+              <div className="knowledge-article-card" key={blog._id}>
+                <div className="knowledge-top-row">
+                  <span className="knowledge-number">0{blogs.indexOf(blog) + 1}</span>
+                  <div className="knowledge-meta">
+                    <span className="insight-tag">{blog.category}</span>
+                    <span className="insight-date">{new Date(blog.publishedAt).toLocaleDateString()}</span>
+                  </div>
+                </div>
+                <h4>{blog.title}</h4>
+                <p>{blog.excerpt || "Read our latest article."}</p>
+                <div className="knowledge-image">
+                  <img src={blog.coverImage || '/image4.jpg'} alt={blog.title} />
+                </div>
+                <Link to={`/blog/${blog._id}`} className="knowledge-link">
+                  <i className="fas fa-arrow-right"></i>
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
 
         </div>
       </section>

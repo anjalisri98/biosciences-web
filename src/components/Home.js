@@ -418,6 +418,7 @@ function Home() {
   const [products, setProducts] = useState([]);
   const [events, setEvents] = useState([]);
   const [blogs, setBlogs] = useState([]);
+  const [packagings, setPackagings] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -427,8 +428,12 @@ function Home() {
 
         const eventRes = await api.get("/dashboard/events/list");
         setEvents(eventRes.data || []);
-          const blogRes = await api.get('/dashboard/blogs/list'); 
+
+        const blogRes = await api.get("/dashboard/blogs/list");
         setBlogs(blogRes.data || []);
+        
+        const packRes = await api.get("/dashboard/packagings/list");
+        setPackagings(packRes.data || []);
       } catch (err) {
         console.error("Failed to fetch data from backend:", err.message);
       }

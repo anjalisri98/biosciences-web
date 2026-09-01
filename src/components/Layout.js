@@ -98,6 +98,12 @@ function Layout() {
           </li>
 
           <li>
+            <Link to="/packaging" onClick={() => setIsMenuOpen(false)}>
+              Packaging
+            </Link>
+          </li>
+
+          <li>
             <Link to="/downloads" onClick={() => setIsMenuOpen(false)}>
               Downloads
             </Link>
@@ -135,6 +141,11 @@ function Layout() {
                 <li>
                   <Link to="/">Home</Link>
                 </li>
+
+                <li>
+                  <Link to="/packaging">Packaging</Link>
+                </li>
+
                 <li>
                   <Link to="/about">About Us</Link>
                 </li>

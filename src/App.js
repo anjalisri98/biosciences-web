@@ -13,6 +13,7 @@ import Contact from "./components/Contact";
 import SubmitEvent from "./components/SubmitEvent";
 import Blog from "./components/Blog";
 import BlogDetails from "./components/BlogDetails";
+import Packaging from "./components/Packaging"; 
 
 // Import Admin pages
 import AdminLogin from "./components/AdminLogin";
@@ -34,6 +35,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
           <Route path="products" element={<Products />} />
+           <Route path="packaging" element={<Packaging />} /> 
           <Route path="events" element={<Events />} />
           <Route path="contact" element={<Contact />} />
           <Route path="downloads" element={<Downloads />} />
